@@ -33,6 +33,10 @@ const routes = [
   {
     path: '/acompanharpedido',
     component: () => import('pages/AcompanharPedido.vue')
+  },
+  {
+    path: '/buscar',
+    component: () => import('pages/BuscaProduto.vue')
   }
 ]
 

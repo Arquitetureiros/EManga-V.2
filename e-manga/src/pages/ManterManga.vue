@@ -14,7 +14,7 @@
           Criar anúncio
         </q-toolbar-title>
         <div>
-          <q-btn flat color="white" label="Meu perfil"
+          <q-btn to="/login" flat color="white" label="Entrar/Cadastrar"
           size="13px"
           />
         </div>
@@ -86,7 +86,7 @@
                 <q-input outlined v-model="number" type="number" prefix="R$" dense style="max-width: 100px"/>
               </div>
               <div class="q-pa-md">
-                <q-btn color="primary" label="Adicionar anúncio"/>
+                <q-btn to="/buscar" color="primary" label="Adicionar anúncio"/>
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@ const linksList = [
   {
     title: 'Início',
     icon: 'school',
-    link: '#'
+    link: '#/buscar'
   },
   {
     title: 'Criar Anuncio',

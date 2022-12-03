@@ -14,7 +14,7 @@
           Meus produtos
         </q-toolbar-title>
         <div>
-          <q-btn flat color="white" label="Entrar/Cadastrar"
+          <q-btn to="/login" flat color="white" label="Entrar/Cadastrar"
           size="13px"
           />
         </div>
@@ -29,70 +29,46 @@
     </q-header>
 
     <q-page-container>
-      <div class="q-pa-md">
-        <div class="text-h4 q-pa-md">
-        </div>
-        <div class="column items-center" style="height: 100px; max-height: 50%; width: 1250px;">
-          <div class="col-9">
-              Adicionar imagens:
-              <q-file color="red" v-model="imagem" style="background-color: #eee; padding: 100px" accept=".jpg, image/*">
-                <template v-slot:prepend>
-                  <q-icon name="attach_image" />
-                </template>
-              </q-file>
-              <div style="display: flex; margin-top: 10px; justify-content: space-between;">
-                <q-file color="red" v-model="imagem1" style="background-color: #eee; height: 80px; width: 80px">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
-              <q-file color="red" v-model="imagem2" style="background-color: #eee; height: 80px; width: 80px">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
-              <q-file color="red" v-model="imagem3" style="background-color: #eee; height: 80px; width: 80px">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
-              <q-file color="red" v-model="imagem4" style="background-color: #eee; height: 80px; width: 80px">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
+      <h4 style="text-align: center;">Meus produtos</h4>
+      <div class="flex justify-around">
+        <q-card class="my-card" style="width: 49%;">
+          <q-card-section>
+            <div class="row justify-between items-stretch">
+              <div class="row items-center" style="width: 80%;">
+                <div style="width: 20%;" class="flex justify-center">
+                  <img src="public/chain.jpg" style="height: 140px;">
+                </div>
+                <div style="width: 60%; height: 100%;" class="flex column">
+                  <div style="height: 50%;" class="flex justify-start">
+                    <h6>Chainsaw man vol. 1</h6>
+                  </div>
+                </div>
               </div>
-          </div>
-          <div class="col-5">
-            <div class="q-pa-md col-9" style="max-width: 300px">
-              Adicionar titulo do anúncio:
-              <q-input outlined v-model="titulo" label="Titulo"/>
-            </div>
-            <div class="q-pa-md" style="max-width: 300px">
-              Adicionar descrição do anúncio:
-              <q-input
-                 v-model="desc"
-                 outlined
-                 type="textarea"
-              />
-            </div>
-            <div class="q-pa-md row" style="max-width: 300px">
-              <div class="q-pr-md" style="max-width: 300px">
-                Quantidade:
-                <q-input
-                   v-model.number="quant"
-                   type="number"
-                   style="max-width: 100px"
-                   dense
-                   outlined
-                />
-              </div>
-              <div class="q-pr-md" style="max-width: 300px">
-                Preço:
-                <q-input outlined v-model="number" type="number" prefix="R$" dense style="max-width: 100px"/>
-              </div>
-              <div class="q-pa-md">
-                <q-btn color="primary" label="Adicionar anúncio"/>
+              <div style="width: 20%;" class="flex justify-center items-center">
+                <q-btn to="/manterManga" color="primary" label="Editar"/>
               </div>
             </div>
-          </div>
-        </div>
+          </q-card-section>
+        </q-card>
+        <q-card class="my-card" style="width: 49%;">
+          <q-card-section>
+            <div class="row justify-between items-stretch">
+              <div class="row items-center" style="width: 80%;">
+                <div style="width: 20%;" class="flex justify-center">
+                  <img src="public/frieren.jpg" style="height: 140px;">
+                </div>
+                <div style="width: 60%; height: 100%;" class="flex column">
+                  <div style="height: 50%;" class="flex justify-start">
+                    <h6>Sousou no Frieren vol. 1</h6>
+                  </div>
+                </div>
+              </div>
+              <div style="width: 20%;" class="flex justify-center items-center">
+                <q-btn to="/manterManga" color="primary" label="Editar"/>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </div>
     </q-page-container>
 
@@ -127,7 +103,7 @@ const linksList = [
   {
     title: 'Início',
     icon: 'school',
-    link: '#'
+    link: '#/buscar'
   },
   {
     title: 'Criar Anuncio',

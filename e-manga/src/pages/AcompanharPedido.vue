@@ -15,7 +15,7 @@
           Acompanhar Pedido
         </q-toolbar-title>
         <div>
-          <q-btn flat color="white" label="Meu perfil"
+          <q-btn to="/login" flat color="white" label="Entrar/Cadastrar"
           size="13px"
           />
         </div>
@@ -112,7 +112,7 @@ const linksList = [
   {
     title: 'Início',
     icon: 'school',
-    link: '#'
+    link: '#/buscar'
   },
   {
     title: 'Criar Anuncio',

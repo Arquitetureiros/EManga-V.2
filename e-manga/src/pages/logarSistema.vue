@@ -15,7 +15,7 @@
           Cadastro
         </q-toolbar-title>
         <div>
-          <q-btn flat color="white" label="Entrar/Cadastrar"
+          <q-btn to="/login" flat color="white" label="Entrar/Cadastrar"
           size="13px"
           />
         </div>
@@ -31,7 +31,7 @@
 
     <q-page-container>
      <!--Página aqui-->
-      <div class="q-pa-md">
+      <div class="q-pa-md" style="display: grid; justify-content: center; padding-top:100px;" >
         <div class="q-gutter-y-md column" style="max-width: 300px">
 
           <span class="text-h5">Cadastre-se</span>
@@ -45,11 +45,14 @@
             <q-input ref="passwRef" v-model="password" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
             <q-input ref="accPassRef" v-model="acceptPassword" label="Confirmar senha *" outlined :type="password ? 'password' : 'text'" :rules="accPasswRules" />
 
-            <q-toggle v-model="accept" label="I accept the license and terms" />
-
             <div>
-              <q-btn label="Submit" type="submit" color="primary" />
-              <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
+              <q-btn label="Cadastrar" type="submit" color="positive" style="width:100%"/>
+
+            </div>
+            <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
+            <div>
+              <q-btn font-awesome-icon icon="fa-brands fa-google" label="Entrar com sua conta Google" type="submit"  style="color: black; background-color: #F5F5F5; width:100%;"/>
+
             </div>
           </form>
         </div>
@@ -89,7 +92,7 @@ const linksList = [
   {
     title: 'Início',
     icon: 'school',
-    link: '#'
+    link: '#/buscar'
   },
   {
     title: 'Criar Anuncio',

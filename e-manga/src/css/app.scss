@@ -1,1 +1,17 @@
 // app global css in SCSS form
+.ribbon::before {
+    content: "------------------------------------";
+    color: grey;
+  }
+  
+.ribbon::after {
+    content: "------------------------------------";
+    color: grey;
+  }
+
+#card {
+  background-color:#E0E0E0;
+  max-width: 190px;
+  max-height: 300px;
+  margin: 7px;
+}
