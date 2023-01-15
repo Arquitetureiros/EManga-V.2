@@ -1,31 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-      <q-toolbar class="bg-primary">
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
-        <q-toolbar-title class="bg-primary">
-          Criar anúncio
-        </q-toolbar-title>
-        <div>
-          <q-btn to="/login" flat color="white" label="Entrar/Cadastrar"
-          size="13px"
-          />
-        </div>
-        <div>
-          <q-btn round>
-            <q-avatar size="42px">
-              <img src="public/avatar.png">
-            </q-avatar>
-          </q-btn>
-        </div>
-      </q-toolbar>
+     <ToolbarMenu @leftDrawer="toggleLeftDrawer"/>
     </q-header>
 
     <q-page-container>
@@ -107,9 +83,6 @@
         </q-item-label>
 
         <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
         />
 
       </q-list>
@@ -120,40 +93,14 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'Início',
-    icon: 'school',
-    link: '#/buscar'
-  },
-  {
-    title: 'Criar Anuncio',
-    icon: 'chat',
-    link: '#/manterManga'
-  },
-  {
-    title: 'Carrinho/Pagamento',
-    icon: 'receipt',
-    link: '#/pagamentos'
-  },
-  {
-    title: 'Meus Pedidos',
-    icon: 'record_voice_over',
-    link: '#/acompanharpedido'
-  },
-  {
-    title: 'Meus Produtos',
-    icon: 'favorite',
-    link: '#/meusProdutos'
-  }
-]
+import ToolbarMenu from 'components/ToolbarMenu.vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    EssentialLink
+    EssentialLink,
+    ToolbarMenu
   },
 
   setup () {
@@ -169,7 +116,6 @@ export default defineComponent({
     const imagem4 = ref()
 
     return {
-      essentialLinks: linksList,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
