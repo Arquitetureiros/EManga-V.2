@@ -41,6 +41,10 @@ const routes = [
   {
     path: '/logar',
     component: () => import('pages/Login.vue')
+  },
+  {
+    path: '/editarperfil',
+    component: () => import('pages/EditarPerfil.vue')
   }
 ]
 
