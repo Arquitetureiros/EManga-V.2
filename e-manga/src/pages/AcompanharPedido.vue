@@ -17,9 +17,9 @@
                 <div style="height: 50%;" class="flex justify-start">
                   <h6>Hunter x Hunter vol. 1</h6>
                 </div>
-                <div style="width: 50%; height: 50%;" class="flex justify-start items-center">
-                  <span>Vendido por Yuripa Mangás</span>
-                  <span>Produto entregue em 09/10/2022</span>
+                <div style="width: 50%; height: 50%;" class="flex row justify-start items-center">
+                  <span style="width: 100%;">Vendido por Yuripa Mangás</span>
+                  <span style="width: 100%;">Produto entregue em 09/10/2022</span>
                 </div>
               </div>
             </div>
@@ -41,9 +41,9 @@
                 <div style="height: 50%;" class="flex justify-start">
                   <h6>Jujutsu Kaisen vol. 1</h6>
                 </div>
-                <div style="width: 50%; height: 50%;" class="flex justify-start items-center">
-                  <p>Vendido por Yuripa Mangás</p>
-                  <p>Produto em trânsito</p>
+                <div style="width: 50%; height: 50%;" class="flex row justify-start items-center">
+                  <span style="width: 100%;">Vendido por Yuripa Mangás</span>
+                  <span style="width: 100%;">Produto em trânsito</span>
                 </div>
               </div>
             </div>
