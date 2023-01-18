@@ -9,7 +9,7 @@
       <div class="q-pa-md" style="display: grid; justify-content: center; padding-top:100px;" >
         <div class="q-gutter-y-md column" style="max-width: 300px">
 
-          <span class="text-h5">Login</span>
+          <span class="text-h5" style="text-align:center;">Login</span>
 
           <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
 
