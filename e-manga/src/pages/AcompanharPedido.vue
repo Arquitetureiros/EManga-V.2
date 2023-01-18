@@ -18,14 +18,14 @@
                   <h6>Hunter x Hunter vol. 1</h6>
                 </div>
                 <div style="width: 50%; height: 50%;" class="flex justify-start items-center">
-                  <p>Vendido por Yuripa Mangás</p>
-                  <p>Produto entregue em 09/10/2022</p>
+                  <span>Vendido por Yuripa Mangás</span>
+                  <span>Produto entregue em 09/10/2022</span>
                 </div>
               </div>
             </div>
             <div style="width: 20%;" class="flex justify-center items-center">
-              <h6>Avaliar Vendedor</h6>
-              <q-rating size="2rem" v-model="ratingModel" :max="5" color="yellow" />
+              <span class="text-h6" style="height: 40%;">Avaliar Vendedor</span>
+              <q-rating size="2rem" v-model="ratingModel" :max="5" color="yellow" style="height:60%;"/>
             </div>
           </div>
         </q-card-section>
@@ -41,15 +41,15 @@
                 <div style="height: 50%;" class="flex justify-start">
                   <h6>Jujutsu Kaisen vol. 1</h6>
                 </div>
-                <div style="width: auto; height: auto;" class="flex column justify-between items-start">
+                <div style="width: 50%; height: 50%;" class="flex justify-start items-center">
                   <p>Vendido por Yuripa Mangás</p>
                   <p>Produto em trânsito</p>
                 </div>
               </div>
             </div>
             <div style="width: 20%;" class="flex justify-center items-center">
-              <h6>Avaliar Vendedor</h6>
-              <p style="text-align: center;">Avaliação disponível após a entrega ser efetuada</p>
+              <span class="text-h6" style="height: 40%;">Avaliar Vendedor</span>
+              <span style="text-align: center; height: 60%;">Avaliação disponível após a entrega ser efetuada</span>
             </div>
           </div>
         </q-card-section>
