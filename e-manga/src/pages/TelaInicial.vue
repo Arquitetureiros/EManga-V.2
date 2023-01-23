@@ -16,6 +16,10 @@
               </div>
         </div>
 
+        <div class="text-h5">
+              <br>
+              &nbsp; &nbsp; Últimos lançamentos:
+            </div>
           <div class="row justify-start">
 
             <div v-for="(product, p) in products" :key="p">
@@ -60,6 +64,7 @@
               </q-card>
 
             </div>
+
             </div>
 
         </div>
@@ -121,6 +126,13 @@ export default defineComponent({
         cd_uf: 'SP',
         price: '20.50',
         url_image: 'public/jujutsu-kaisen.jpg'
+      }, {
+        id: 3,
+        name: 'Mob Psycho 100 vol.1',
+        city: 'Jandaia do Sul',
+        cd_uf: 'PR',
+        price: '78.25',
+        url_image: 'public/mobpsycho.jpg'
       }
       ])
     const inCart = ref([])

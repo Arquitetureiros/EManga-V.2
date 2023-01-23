@@ -2,7 +2,7 @@
 const routes = [
   {
     path: '/',
-    component: () => import('pages/BuscaProduto.vue')
+    component: () => import('pages/TelaInicial.vue')
     // children: [
     //   { path: '', component: () => import('pages/IndexPage.vue') }
     // ]

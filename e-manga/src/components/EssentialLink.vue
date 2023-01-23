@@ -50,7 +50,7 @@ export default defineComponent({
       {
         title: 'Anúncios',
         icon: 'fa-solid fa-store',
-        link: '#/buscar'
+        link: '#/'
       },
       {
         title: 'Novo Anúncio',
@@ -64,7 +64,6 @@ export default defineComponent({
       },
       {
         title: 'Meus Anúncios',
-
         icon: 'fa-solid fa-folder',
         link: '#/meusProdutos'
       },
