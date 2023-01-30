@@ -12,7 +12,7 @@
         <div>
               <div class="row justify-center">
                 <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar mangá"/>
-                <q-btn class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
+                <q-btn to="/buscar" class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
               </div>
         </div>
 
@@ -129,6 +129,27 @@ export default defineComponent({
       }, {
         id: 3,
         name: 'Mob Psycho 100 vol.1',
+        city: 'Jandaia do Sul',
+        cd_uf: 'PR',
+        price: '78.25',
+        url_image: 'public/mobpsycho.jpg'
+      }, {
+        id: 4,
+        name: 'Chainsaw Man vol.2',
+        city: 'Curitiba',
+        cd_uf: 'PR',
+        price: '14.25',
+        url_image: 'public/chain.jpg'
+      }, {
+        id: 5,
+        name: 'Jujutsu Kaisen vol.2',
+        city: 'São Paulo',
+        cd_uf: 'SP',
+        price: '20.50',
+        url_image: 'public/jujutsu-kaisen.jpg'
+      }, {
+        id: 6,
+        name: 'Mob Psycho 100 vol.2',
         city: 'Jandaia do Sul',
         cd_uf: 'PR',
         price: '78.25',

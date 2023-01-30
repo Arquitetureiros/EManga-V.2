@@ -116,11 +116,32 @@ export default defineComponent({
         url_image: 'public/chain.jpg'
       }, {
         id: 2,
-        name: 'Jujutsu Kaisen vol.1',
+        name: 'Chainsaw Man vol.10',
         city: 'São Paulo',
         cd_uf: 'SP',
         price: '20.50',
-        url_image: 'public/jujutsu-kaisen.jpg'
+        url_image: 'public/chainsaw.jpg'
+      }, {
+        id: 3,
+        name: 'Chainsaw Man vol.9',
+        city: 'Maringá',
+        cd_uf: 'PR',
+        price: '17.25',
+        url_image: 'public/chainsa-vol-9.jpg'
+      }, {
+        id: 4,
+        name: 'Jujutsu Kaisen vol.10',
+        city: 'São Paulo',
+        cd_uf: 'SP',
+        price: '27.50',
+        url_image: 'public/chainsaw.jpg'
+      }, {
+        id: 5,
+        name: 'Chainsaw Man vol.1',
+        city: 'Maringá',
+        cd_uf: 'PR',
+        price: '10.25',
+        url_image: 'public/chain.jpg'
       }
       ])
     const inCart = ref([])
