@@ -26,6 +26,7 @@
                 </div>
                  <q-card-section>
                       <span class="text-subtitle2"> {{product.name}} </span><br>
+                      <span class="text-subtitle3 text-grey" >{{ product.owner }} </span>
                       <div class="row justify-between">
                         <span class="text-subtitle2 text-green-14" >R$ {{ product.price }} </span>
                         <div>
@@ -113,14 +114,16 @@ export default defineComponent({
         city: 'Maringá',
         cd_uf: 'PR',
         price: '14.25',
-        url_image: 'public/chain.jpg'
+        url_image: 'public/chain.jpg',
+        owner: 'Yuripa Mangás'
       }, {
         id: 2,
         name: 'Jujutsu Kaisen vol.1',
         city: 'São Paulo',
         cd_uf: 'SP',
         price: '20.50',
-        url_image: 'public/jujutsu-kaisen.jpg'
+        url_image: 'public/jujutsu-kaisen.jpg',
+        owner: 'Valentas'
       }
       ])
     const inCart = ref([])
@@ -134,6 +137,7 @@ export default defineComponent({
 
     function addToCart (product) {
       inCart.value.push(product)
+      product.inOrder = true
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
     }
 
