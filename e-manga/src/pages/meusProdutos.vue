@@ -1,51 +1,64 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
-     <ToolbarMenu @leftDrawer="toggleLeftDrawer"/>
+      <ToolbarMenu @leftDrawer="toggleLeftDrawer"/>
     </q-header>
 
     <q-page-container>
-      <h4 style="text-align: center;">Meus produtos</h4>
-      <div class="flex justify-around">
-        <q-card class="my-card" style="width: 49%;">
-          <q-card-section>
-            <div class="row justify-between items-stretch">
-              <div class="row items-center" style="width: 80%;">
-                <div style="width: 20%;" class="flex justify-center">
-                  <img src="public/chain.jpg" style="height: 140px;">
+      <div class="q-pa-md" style="margin-top: 25px;">
+        <div class="float-right">
+          <MarketCart v-if="showCart" :products="getProductsOnCart()"/>
+        </div>
+        <div>
+              <div class="row justify-center">
+                <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar seu anúncio"/>
+                <q-btn class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
+              </div>
+        </div>
+
+          <div class="row justify-start">
+
+            <div v-for="(product, p) in products" :key="p">
+              <q-card id="my-card"  class="col-3 col-md-2 bg-grey-3 q-ma-lg q-hoverable">
+                <div v-ripple to="/verManga" class="cursor-pointer relative-position">
+                  <img :src=product.url_image class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
+                  <span class="q-focus-helper"></span>
                 </div>
-                <div style="width: 60%; height: 100%;" class="flex column">
-                  <div style="height: 50%;" class="flex justify-start">
-                    <h6>Chainsaw man vol. 1</h6>
+                 <q-card-section>
+                      <span class="text-subtitle2"> {{product.name}} </span><br>
+                      <div class="row justify-between">
+                        <span class="text-subtitle2 text-green-14" ></span>
+                        <div>
+                          <q-btn
+                            color="grey-8"
+                            round
+                            flat
+                            dense
+                            icon="fa-solid fa-pencil"
+                            to="/editarManga"
+                          >
+                            <q-tooltip>
+                              Editar mangá
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
+                      </div>
+                </q-card-section>
+                <q-slide-transition>
+                  <div v-show="expanded[p]">
+                    <q-separator />
+                    <q-card-section class="text-subitle2">
+                     {{product.city}} - {{product.cd_uf}}
+                    </q-card-section>
                   </div>
-                </div>
-              </div>
-              <div style="width: 20%;" class="flex justify-center items-center">
-                <q-btn to="/manterManga" color="primary" label="Editar"/>
-              </div>
+                </q-slide-transition>
+              </q-card>
+
             </div>
-          </q-card-section>
-        </q-card>
-        <q-card class="my-card" style="width: 49%;">
-          <q-card-section>
-            <div class="row justify-between items-stretch">
-              <div class="row items-center" style="width: 80%;">
-                <div style="width: 20%;" class="flex justify-center">
-                  <img src="public/frieren.jpg" style="height: 140px;">
-                </div>
-                <div style="width: 60%; height: 100%;" class="flex column">
-                  <div style="height: 50%;" class="flex justify-start">
-                    <h6>Sousou no Frieren vol. 1</h6>
-                  </div>
-                </div>
-              </div>
-              <div style="width: 20%;" class="flex justify-center items-center">
-                <q-btn to="/manterManga" color="primary" label="Editar"/>
-              </div>
             </div>
-          </q-card-section>
-        </q-card>
-      </div>
+
+        </div>
+
     </q-page-container>
 
     <q-drawer
@@ -60,16 +73,16 @@
         Opções
         </q-item-label>
 
-        <EssentialLink
-        />
+        <EssentialLink/>
 
       </q-list>
     </q-drawer>
   </q-layout>
 </template>
-
 <script>
+import { useQuasar } from 'quasar'
 import { defineComponent, ref } from 'vue'
+import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 
@@ -78,35 +91,78 @@ export default defineComponent({
 
   components: {
     EssentialLink,
+    MarketCart,
     ToolbarMenu
   },
 
   setup () {
     const leftDrawerOpen = ref(false)
     const nrItens = ref(1)
-    const titulo = ref()
-    const desc = ref()
-    const quant = ref(1)
-    const imagem = ref()
-    const imagem1 = ref()
-    const imagem2 = ref()
-    const imagem3 = ref()
-    const imagem4 = ref()
+    const busca = ref()
+    const expanded = ref([])
+    const $q = useQuasar()
+    const $router = useQuasar()
+    const products = ref(
+      [{
+        id: 1,
+        name: 'Chainsaw Man vol.1',
+        city: 'Maringá',
+        cd_uf: 'PR',
+        price: '14.25',
+        url_image: 'public/chain.jpg'
+      }, {
+        id: 2,
+        name: 'Jujutsu Kaisen vol.1',
+        city: 'São Paulo',
+        cd_uf: 'SP',
+        price: '20.50',
+        url_image: 'public/jujutsu-kaisen.jpg'
+      }, {
+        id: 3,
+        name: 'Sousou no Frieren vol.1',
+        city: 'São Paulo',
+        cd_uf: 'SP',
+        price: '32.50',
+        url_image: 'public/frieren.jpg'
+      }
+
+      ])
+    const inCart = ref([])
+    const showCart = ref(false)
+
+    function acessarAnuncio () {
+      $router.replace('/verManga')
+    }
+
+    function addToCart (product) {
+      inCart.value.push(product)
+      localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
+    }
+
+    function toggleLeftDrawer () {
+      leftDrawerOpen.value = !leftDrawerOpen.value
+    }
+
+    function getProductsOnCart () {
+      console.log(JSON.parse(localStorage.getItem('cartProducts')))
+      return JSON.parse(localStorage.getItem('cartProducts'))
+    }
 
     return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
+      MarketCart,
       nrItens,
-      titulo,
-      desc,
-      quant,
-      imagem,
-      imagem1,
-      imagem2,
-      imagem3,
-      imagem4
+      busca,
+      expanded,
+      acessarAnuncio,
+      $q,
+      $router,
+      addToCart,
+      products,
+      inCart,
+      getProductsOnCart,
+      showCart,
+      leftDrawerOpen,
+      toggleLeftDrawer
     }
   }
 })
