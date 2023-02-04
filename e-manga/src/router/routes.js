@@ -37,6 +37,14 @@ const routes = [
   {
     path: '/buscar',
     component: () => import('pages/BuscaProduto.vue')
+  },
+  {
+    path: '/verManga',
+    component: () => import('pages/verManga.vue')
+  },
+  {
+    path: '/editarManga',
+    component: () => import('pages/editarManga.vue')
   }
 ]
 
