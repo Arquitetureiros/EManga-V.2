@@ -24,7 +24,7 @@
 
             <div v-for="(product, p) in products" :key="p">
               <q-card id="my-card"  class="col-3 col-md-2 bg-grey-3 q-ma-lg q-hoverable">
-                <div v-ripple @click="acessarAnuncio" class="cursor-pointer relative-position">
+                <div v-ripple @click="acessarAnuncio ()" class="cursor-pointer relative-position">
                   <img :src=product.url_image class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
                   <span class="q-focus-helper"></span>
                 </div>
@@ -160,9 +160,7 @@ export default defineComponent({
     const showCart = ref(false)
 
     function acessarAnuncio () {
-      $q.notify(
-        'fazer abrir outra tela para o item clicado'
-      )
+      this.$router.push('/verManga')
     }
 
     function addToCart (product) {

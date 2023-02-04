@@ -122,21 +122,24 @@ export default defineComponent({
         city: 'São Paulo',
         cd_uf: 'SP',
         price: '20.50',
-        url_image: 'public/chainsaw.jpg'
+        url_image: 'public/chainsaw.jpg',
+        owner: 'Valentas'
       }, {
         id: 3,
         name: 'Chainsaw Man vol.9',
         city: 'Maringá',
         cd_uf: 'PR',
         price: '17.25',
-        url_image: 'public/chainsa-vol-9.jpg'
+        url_image: 'public/chainsa-vol-9.jpg',
+        owner: 'Valentas'
       }, {
         id: 4,
         name: 'Jujutsu Kaisen vol.10',
         city: 'São Paulo',
         cd_uf: 'SP',
         price: '27.50',
-        url_image: 'public/chainsaw.jpg'
+        url_image: 'public/chainsaw.jpg',
+        owner: 'Valentas'
       }, {
         id: 5,
         name: 'Chainsaw Man vol.1',
@@ -152,7 +155,7 @@ export default defineComponent({
 
     function acessarAnuncio () {
       $q.notify(
-        'fazer abrir outra tela para o item clicado'
+        this.$router.push('/verManga')
       )
     }
 
