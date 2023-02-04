@@ -12,21 +12,24 @@
         <div>
               <div class="row justify-center">
                 <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar mangá"/>
-                <q-btn class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
+                <q-btn to="/buscar" class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
               </div>
         </div>
 
+        <div class="text-h5">
+              <br>
+              &nbsp; &nbsp; Últimos lançamentos:
+            </div>
           <div class="row justify-start">
 
             <div v-for="(product, p) in products" :key="p">
               <q-card id="my-card"  class="col-3 col-md-2 bg-grey-3 q-ma-lg q-hoverable">
-                <div v-ripple @click="acessarAnuncio" class="cursor-pointer relative-position">
+                <div v-ripple @click="acessarAnuncio ()" class="cursor-pointer relative-position">
                   <img :src=product.url_image class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
                   <span class="q-focus-helper"></span>
                 </div>
                  <q-card-section>
                       <span class="text-subtitle2"> {{product.name}} </span><br>
-                      <span class="text-subtitle3 text-grey" >{{ product.owner }} </span>
                       <div class="row justify-between">
                         <span class="text-subtitle2 text-green-14" >R$ {{ product.price }} </span>
                         <div>
@@ -61,6 +64,7 @@
               </q-card>
 
             </div>
+
             </div>
 
         </div>
@@ -114,54 +118,53 @@ export default defineComponent({
         city: 'Maringá',
         cd_uf: 'PR',
         price: '14.25',
-        url_image: 'public/chain.jpg',
-        owner: 'Yuripa Mangás'
+        url_image: 'public/chain.jpg'
       }, {
         id: 2,
-        name: 'Chainsaw Man vol.10',
+        name: 'Jujutsu Kaisen vol.1',
         city: 'São Paulo',
         cd_uf: 'SP',
         price: '20.50',
-        url_image: 'public/chainsaw.jpg',
-        owner: 'Valentas'
+        url_image: 'public/jujutsu-kaisen.jpg'
       }, {
         id: 3,
-        name: 'Chainsaw Man vol.9',
-        city: 'Maringá',
+        name: 'Mob Psycho 100 vol.1',
+        city: 'Jandaia do Sul',
         cd_uf: 'PR',
-        price: '17.25',
-        url_image: 'public/chainsa-vol-9.jpg',
-        owner: 'Valentas'
+        price: '78.25',
+        url_image: 'public/mobpsycho.jpg'
       }, {
         id: 4,
-        name: 'Jujutsu Kaisen vol.10',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '27.50',
-        url_image: 'public/chainsaw.jpg',
-        owner: 'Valentas'
+        name: 'Chainsaw Man vol.2',
+        city: 'Curitiba',
+        cd_uf: 'PR',
+        price: '14.25',
+        url_image: 'public/chain.jpg'
       }, {
         id: 5,
-        name: 'Chainsaw Man vol.1',
-        city: 'Maringá',
+        name: 'Jujutsu Kaisen vol.2',
+        city: 'São Paulo',
+        cd_uf: 'SP',
+        price: '20.50',
+        url_image: 'public/jujutsu-kaisen.jpg'
+      }, {
+        id: 6,
+        name: 'Mob Psycho 100 vol.2',
+        city: 'Jandaia do Sul',
         cd_uf: 'PR',
-        price: '10.25',
-        url_image: 'public/chain.jpg',
-        owner: 'Valentas'
+        price: '78.25',
+        url_image: 'public/mobpsycho.jpg'
       }
       ])
     const inCart = ref([])
     const showCart = ref(false)
 
     function acessarAnuncio () {
-      $q.notify(
-        this.$router.push('/verManga')
-      )
+      this.$router.push('/verManga')
     }
 
     function addToCart (product) {
       inCart.value.push(product)
-      product.inOrder = true
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
     }
 
