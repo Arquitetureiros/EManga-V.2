@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from emanga.models import Cliente
+from emanga.models import Usuario
 
-class ClienteSerializer(serializers.ModelSerializer):
+class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Cliente
-        fields=('id', 'nome')
+        model=Usuario
+        fields=('id', 'nome', 'email', 'senha')

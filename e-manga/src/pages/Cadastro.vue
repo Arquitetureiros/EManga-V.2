@@ -13,15 +13,15 @@
 
           <form class="q-gutter-md">
 
-            <q-input outlined v-model="cliente.nome" label="Nome *" :dense="dense" lazy-rules />
+            <q-input outlined v-model="usuario.nome" label="Nome *" :dense="dense" lazy-rules />
 
-            <q-input outlined type="email" label="Email *" :dense="dense" lazy-rules />
+            <q-input outlined v-model="usuario.email" type="email" label="Email *" :dense="dense" lazy-rules />
 
-            <q-input label="Senha *" outlined :type="password ? 'password' : 'text'"/>
-            <q-input label="Confirmar senha *" outlined :type="password ? 'password' : 'text'"/>
+            <q-input v-model="usuario.senha" label="Senha *" outlined type="password"/>
+            <q-input v-model="aux.conf_senha" label="Confirmar senha *" outlined type="password"/>
 
             <div>
-              <q-btn label="Cadastrar" @click="CadastrarCliente" color="positive" style="width:100%"/>
+              <q-btn label="Cadastrar" @click="CadastrarUsuario" color="positive" style="width:100%"/>
 
             </div>
             <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
@@ -60,7 +60,7 @@ import { defineComponent } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 
-import ClienteDataService from '../services/ClienteDataService'
+import UsuarioDataService from '../services/UsuarioDataService'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -72,20 +72,31 @@ export default defineComponent({
 
   data () {
     return {
-      cliente: {
-        nome: ''
+      usuario: {
+        nome: '',
+        email: '',
+        senha: ''
+      },
+      aux: {
+        conf_senha: ''
       }
     }
   },
   methods: {
-    CadastrarCliente () {
+    CadastrarUsuario () {
       const data = {
-        nome: this.cliente.nome
+        nome: this.usuario.nome,
+        email: this.usuario.email,
+        senha: this.usuario.senha
       }
 
-      ClienteDataService.cadastrar(data)
+      if (data.senha !== this.aux.conf_senha) {
+        return
+      }
+
+      UsuarioDataService.cadastrar(data)
         .then(() => {
-          this.$router.push('logar')
+          this.$router.push('login')
         })
     }
   }

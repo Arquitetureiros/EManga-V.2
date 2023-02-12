@@ -19,8 +19,8 @@ const routes = [
     component: () => import('pages/IndexPagamento.vue')
   },
   {
-    path: '/login',
-    component: () => import('pages/logarSistema.vue')
+    path: '/cadastro',
+    component: () => import('src/pages/Cadastro.vue')
   },
   {
     path: '/manterManga',
@@ -39,7 +39,7 @@ const routes = [
     component: () => import('pages/BuscaProduto.vue')
   },
   {
-    path: '/logar',
+    path: '/login',
     component: () => import('pages/Login.vue')
   },
   {
