@@ -11,17 +11,17 @@
 
           <span class="text-h5" style="text-align:center;">Cadastre-se</span>
 
-          <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
+          <form class="q-gutter-md">
 
-            <q-input ref="nameRef" outlined v-model="name" label="Nome *" :dense="dense" lazy-rules :rules="nameRules" />
+            <q-input outlined v-model="cliente.nome" label="Nome *" :dense="dense" lazy-rules />
 
-            <q-input ref="emailRef" outlined v-model="email" type="email" label="Email *" :dense="dense" lazy-rules :rules="emailRules" />
+            <q-input outlined type="email" label="Email *" :dense="dense" lazy-rules />
 
-            <q-input ref="passwRef" v-model="password" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
-            <q-input ref="accPassRef" v-model="acceptPassword" label="Confirmar senha *" outlined :type="password ? 'password' : 'text'" :rules="accPasswRules" />
+            <q-input label="Senha *" outlined :type="password ? 'password' : 'text'"/>
+            <q-input label="Confirmar senha *" outlined :type="password ? 'password' : 'text'"/>
 
             <div>
-              <q-btn label="Cadastrar" type="submit" color="positive" style="width:100%"/>
+              <q-btn label="Cadastrar" @click="CadastrarCliente" color="positive" style="width:100%"/>
 
             </div>
             <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
@@ -56,10 +56,11 @@
 </template>
 
 <script>
-import { useQuasar } from 'quasar'
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
+
+import ClienteDataService from '../services/ClienteDataService'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -69,83 +70,23 @@ export default defineComponent({
     ToolbarMenu
   },
 
-  setup () {
-    const $q = useQuasar()
-    const leftDrawerOpen = ref(false)
-    const nrItens = ref(1)
-    const name = ref()
-    const email = ref()
-    const password = ref()
-    const isPwd = ref(true)
-    const accept = ref(false)
-    const nameRef = ref()
-    const emailRef = ref()
-    const passwRef = ref()
-    const acceptPassword = ref()
-    const accPassRef = ref()
-
+  data () {
     return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-      nrItens,
-      password,
-      passwRef,
-      isPwd,
-      acceptPassword,
-      accPassRef,
-      email,
-      emailRef,
-      name,
-      nameRef,
-      nameRules: [
-        val => (val && val.length > 0) || 'Digite um nome'
-      ],
-      emailRules: [
-        val => (val && val.length > 0) || 'Digite um email'
-      ],
-      passwRules: [
-        val => (val && val.length > 0) || 'Digite uma senha'
-      ],
-      accPasswRules: [
-        val => (val && val.length > 0) || 'Digite a mesma senha'
-      ],
-      accept,
-
-      onSubmit () {
-        nameRef.value.validate()
-        emailRef.value.validate()
-        passwRef.value.validate()
-        accPassRef.value.validate()
-
-        if (nameRef.value.hasError || emailRef.value.hasError || passwRef.value.hasError || accPassRef.value.hasError) {
-          // form has error
-        } else if (accept.value !== true) {
-          $q.notify({
-            color: 'negative',
-            message: 'É preciso aceitar os termos de uso antes'
-          })
-        } else {
-          $q.notify({
-            icon: 'done',
-            color: 'positive',
-            message: 'Submitted'
-          })
-        }
-      },
-
-      onReset () {
-        name.value = null
-        email.value = null
-        password.value = null
-        acceptPassword.value = null
-
-        nameRef.value.resetValidation()
-        emailRef.value.resetValidation()
-        passwRef.value.resetValidation()
-        accPassRef.value.resetValidation()
+      cliente: {
+        nome: ''
       }
+    }
+  },
+  methods: {
+    CadastrarCliente () {
+      const data = {
+        nome: this.cliente.nome
+      }
+
+      ClienteDataService.cadastrar(data)
+        .then(() => {
+          this.$router.push('logar')
+        })
     }
   }
 })

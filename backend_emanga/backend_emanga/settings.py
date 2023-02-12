@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-c0jy!2a5d!@aerxfs)50bq$p(s5!u)u=-x7+y6kkm=6ei1des(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'http://localhost:9000',
+    '127.0.0.1',
+    'localhost'
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -38,12 +44,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'emanga',
+    
 ]
 
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,7 +96,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'emanga',
         'USER': 'root',
-        'PASSWORD': 'alteraraqui',
+        'PASSWORD': 'Gg#22022002',
         'HOST': 'localhost',
         'PORT': '3306'
     }
