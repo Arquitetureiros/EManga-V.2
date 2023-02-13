@@ -142,6 +142,8 @@
 import { defineComponent, ref, onMounted } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
+import axios from 'axios'
+
 export default defineComponent({
   name: 'MainLayout',
   components: {
@@ -168,13 +170,22 @@ export default defineComponent({
       dt_validade: null,
       nr_cvv: null
     })
+
     function total () {
       const vltotal = ((valor.value * qtd.value) + parseFloat(opFrete.value))
       return vltotal
     }
+
     function efetuarPagamento () {
-      console.log(dadosCartao)
+      axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
+      }
+
+      axios.post('http://127.0.0.1:8000/api/teste', dadosCartao.value).then((response) => {
+        console.log(response)
+      })
     }
+
     function copyText () {
       const storage = document.createElement('textarea')
       document.body.appendChild(storage)
