@@ -104,32 +104,10 @@ export default defineComponent({
     const $router = useQuasar()
     const products = ref(
       [{
-        id: 1,
-        name: 'Chainsaw Man vol.1',
-        city: 'Maringá',
-        cd_uf: 'PR',
-        price: '14.25',
-        url_image: 'public/chain.jpg'
-      }, {
-        id: 2,
-        name: 'Jujutsu Kaisen vol.1',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '20.50',
-        url_image: 'public/jujutsu-kaisen.jpg'
-      }, {
-        id: 3,
-        name: 'Sousou no Frieren vol.1',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '32.50',
-        url_image: 'public/frieren.jpg'
       }
-
       ])
     const inCart = ref([])
     const showCart = ref(false)
-
     function acessarAnuncio () {
       $router.replace('/verManga')
     }
