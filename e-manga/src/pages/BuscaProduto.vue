@@ -160,6 +160,7 @@ export default defineComponent({
     }
 
     function addToCart (product) {
+      inCart.value = JSON.parse(localStorage.getItem('cartProducts'))
       inCart.value.push(product)
       product.inOrder = true
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))

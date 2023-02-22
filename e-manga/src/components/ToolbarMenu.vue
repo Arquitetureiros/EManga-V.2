@@ -9,16 +9,10 @@
           aria-label="Menu"
           @click="$emit('leftDrawer')"
         />
-
         <q-toolbar-title class="bg-primary">
           Anúncios
         </q-toolbar-title>
-        <q-btn icon="fa-solid fa-basket-shopping" flat color="white" @click="showCart = !showCart">
-          <q-badge color="orange" floating> {{quantityOnCart}} </q-badge>
-          <q-tooltip>
-            Ver Carrinho
-          </q-tooltip>
-        </q-btn>
+        <MarketCart :seamless="showCart"/>
         <div>
           <q-btn to="/login" flat color="white" label="Meu Perfil"
           size="13px"
@@ -32,37 +26,21 @@
           </q-btn>
         </div>
       </q-toolbar>
-      <div class="float-right">
-        <MarketCart v-if="showCart" :products="getProductsOnCart()"/>
-      </div>
   </div>
 </template>
 <script>
-import { ref } from 'vue'
+import MarketCart from 'components/MarketCart.vue'
+
 export default {
+  components: {
+    MarketCart
+  },
   setup () {
-    const showCart = ref(false)
-    const quantityOnCart = ref(JSON.parse(localStorage.getItem('cartProducts')) ? JSON.parse(localStorage.getItem('cartProducts')).length : 0)
-
-    function getQuantityOnCart () {
-      quantityOnCart.value = JSON.parse(localStorage.getItem('cartProducts')).length
-    }
-
-    function getProductsOnCart () {
-      console.log(localStorage.getItem('cartProducts'))
-      return JSON.parse(localStorage.getItem('cartProducts'))
-    }
-
-    document.onstorage = () => {
-      console.log(localStorage.getItem('cartProducts'))
-      getQuantityOnCart()
-    }
-
     // window.addEventlistener('storage', (event) => {
     //   console.log(localStorage.getItem(event.key))
     // })
 
-    return { showCart, getProductsOnCart, quantityOnCart, getQuantityOnCart }
+    return { }
   }
 }
 </script>
