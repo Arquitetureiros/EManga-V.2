@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-btn icon="fa-solid fa-basket-shopping" flat color="white" @click="seamless = !seamless; getProductsOnCart()">
-      <q-badge color="orange" floating> {{quantityOnCart}} </q-badge>
+      <q-badge color="orange" floating> {{quantityOnCart.get()}} </q-badge>
       <q-tooltip>
         Ver Carrinho
       </q-tooltip>
@@ -9,22 +9,29 @@
     <q-dialog v-model="seamless" seamless position="right">
       <q-card style="width: 350px">
         <q-linear-progress :value="1" color="primary" />
-        <div class="row">
-          <q-btn class="col-2 self-end" flat @click="seamless = !seamless" icon="fa-regular fa-x" color="primary"></q-btn>
+        <div class="row justify-between">
+          <div class='col-4 q-px-md q-py-sm text-h6 text-primary'>
+            <span> Carrinho </span>
+          </div>
+          <div class="col-2">
+            <q-btn flat @click="seamless = !seamless" icon="fa-regular fa-x" color="primary"></q-btn>
+          </div>
         </div>
         <q-card-section class="row items-center">
-          <div class="row q-py-sm" v-for="(product, p) in products" :key="p">
-            <div class="col-9">
-              <q-img :src="product.url_image" style="height: 200px; width: 150px"/>
+          <div v-if="products.length == 0" class="text-grey">Vazio</div>
+          <div class="row q-py-sm" v-else v-for="(product, p) in products" :key="p">
+            <div class="col-9 rounded-borders q-pl-md">
+              <q-img :src="product.url_image" style="height: 200px; width: 150px; border-radius: 5px;"/>
               <div class="text-weight-bold">{{product.name}}</div>
+              <!-- <span> {{ product.quantity }}</span> -->
               <div class="text-green">R$ {{product.price}}</div>
             </div>
-            <div class="col-3">
-              <q-btn flat color="primary" icon="fa-solid fa-trash" @click="removeProduct(product)">
+            <div class="col-3 self-end q-pb-sm">
+              <q-btn flat color="primary" icon="fa-solid fa-trash" @click="removeProduct(p)">
+                <q-tooltip class="bg-white text-primary">Remover produto</q-tooltip>
               </q-btn>
             </div>
             <div class="col-12">
-
             <hr/>
             </div>
             <!-- <div class="text-grey">{{product}}</div> -->
@@ -35,21 +42,27 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 export default defineComponent({
   name: 'MarketCart',
 
   setup () {
     const seamless = ref(false)
     const products = ref([])
-    const quantityOnCart = ref(JSON.parse(localStorage.getItem('cartProducts')) ? JSON.parse(localStorage.getItem('cartProducts')).length : 0)
+    const quantityOnCart = computed({
+      get() {
+        return JSON.parse(localStorage.getItem('cartProducts')) ? JSON.parse(localStorage.getItem('cartProducts')).length : 0
+      }
+    }
+    )
+    // ref(JSON.parse(localStorage.getItem('cartProducts')) ? JSON.parse(localStorage.getItem('cartProducts')).length : 0)
 
     function getProductsOnCart () {
       products.value = JSON.parse(localStorage.getItem('cartProducts'))
     }
 
-    function removeProduct (product) {
-      products.value.pop(products.value.indexOf(product))
+    function removeProduct (index) {
+      products.value.splice(index, 1)
       localStorage.setItem('cartProducts', JSON.stringify(products.value))
       getProductsOnCart()
     }
