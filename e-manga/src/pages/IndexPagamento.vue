@@ -79,7 +79,7 @@
                              </div>
                              <div class="text-h6">Total: <span class="text-positive">R$ {{total()}}</span></div>
                           </q-card>
-                          <q-btn class="q-my-md float-left" @click="formaPagamento = !formaPagamento" color="primary">Finalizar pedido</q-btn>
+                          <q-btn class="q-my-md float-left" @click="formaPagamento = !formaPagamento" color="blue-8">Finalizar pedido</q-btn>
                        </div>
                        <div v-if="formaPagamento" class="col-12">
                           <div class="row">
@@ -117,7 +117,7 @@
                                    <q-input outlined v-model="dadosCartao.nm_pessoa" dense color="primary" label="Nome no cartao" />
                                 </div>
                              </div>
-                             <q-btn class="q-my-md float-left" @click="efetuarPagamento" color="primary">Efetuar pagamento</q-btn>
+                             <q-btn class="q-my-md float-left" @click="efetuarPagamento" color="green-8">Efetuar pagamento</q-btn>
                           </div>
                           <div v-if="tab == 'boleto'">
                              <div class="text-h6">                    Boleto                  </div>

@@ -88,7 +88,6 @@ import ToolbarMenu from 'components/ToolbarMenu.vue'
 
 export default defineComponent({
   name: 'MainLayout',
-
   components: {
     EssentialLink,
     MarketCart,
@@ -102,6 +101,7 @@ export default defineComponent({
     const expanded = ref([])
     const $q = useQuasar()
     const $router = useQuasar()
+    const MarketCart = MarketCart;
     const products = ref(
       [{
         id: 1,

@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-btn icon="fa-solid fa-basket-shopping" flat color="white" @click="seamless = !seamless; getProductsOnCart()">
-      <q-badge color="orange" floating> {{quantityOnCart.get()}} </q-badge>
+      <q-badge color="orange" floating> {{products.length}} </q-badge>
       <q-tooltip>
         Ver Carrinho
       </q-tooltip>
@@ -26,9 +26,9 @@
               <!-- <span> {{ product.quantity }}</span> -->
               <div class="text-green">R$ {{product.price}}</div>
             </div>
-            <div class="col-3 self-end q-pb-sm">
+            <div class="col-3 q-pb-sm">
               <q-btn flat color="primary" icon="fa-solid fa-trash" @click="removeProduct(p)">
-                <q-tooltip class="bg-white text-primary">Remover produto</q-tooltip>
+                <q-tooltip class="bg-primary text-white">Remover produto</q-tooltip>
               </q-btn>
             </div>
             <div class="col-12">
@@ -42,20 +42,14 @@
   </div>
 </template>
 <script>
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 export default defineComponent({
   name: 'MarketCart',
 
   setup () {
     const seamless = ref(false)
     const products = ref([])
-    const quantityOnCart = computed({
-      get() {
-        return JSON.parse(localStorage.getItem('cartProducts')) ? JSON.parse(localStorage.getItem('cartProducts')).length : 0
-      }
-    }
-    )
-    // ref(JSON.parse(localStorage.getItem('cartProducts')) ? JSON.parse(localStorage.getItem('cartProducts')).length : 0)
+    const quantityOnCart = ref()
 
     function getProductsOnCart () {
       products.value = JSON.parse(localStorage.getItem('cartProducts'))
@@ -66,6 +60,10 @@ export default defineComponent({
       localStorage.setItem('cartProducts', JSON.stringify(products.value))
       getProductsOnCart()
     }
+
+    onMounted(() => {
+      getProductsOnCart()
+    })
 
     return {
       seamless,
