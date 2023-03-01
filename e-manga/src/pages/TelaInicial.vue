@@ -11,7 +11,7 @@
         </div>
         <div>
               <div class="row justify-center">
-                <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar mangá"/>
+               <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar mangá"/>    <!-- adicionar function para receber o valor e levar para outra tela  -->
                 <q-btn to="/buscar" class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
               </div>
         </div>
@@ -25,13 +25,13 @@
             <div v-for="(product, p) in products" :key="p">
               <q-card id="my-card"  class="col-3 col-md-2 bg-grey-3 q-ma-lg q-hoverable">
                 <div v-ripple @click="acessarAnuncio ()" class="cursor-pointer relative-position">
-                  <img :src=product.url_image class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
+                  <img :src=product.fotoCaminho class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
                   <span class="q-focus-helper"></span>
                 </div>
                  <q-card-section>
-                      <span class="text-subtitle2"> {{product.name}} </span><br>
+                      <span class="text-subtitle2"> {{product.ds_titulo}} </span><br>
                       <div class="row justify-between">
-                        <span class="text-subtitle2 text-green-14" >R$ {{ product.price }} </span>
+                        <span class="text-subtitle2 text-green-14" >R$ {{ product.valor }} </span>
                         <div>
                           <q-btn
                             color="grey-8"
@@ -57,7 +57,7 @@
                   <div v-show="expanded[p]">
                     <q-separator />
                     <q-card-section class="text-subitle2">
-                     {{product.city}} - {{product.cd_uf}}
+                     {{product.cidade}} - {{product.estado}}
                     </q-card-section>
                   </div>
                 </q-slide-transition>
@@ -95,6 +95,7 @@ import { defineComponent, ref } from 'vue'
 import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
+import MangaDataService from 'src/services/MangaDataService'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -111,51 +112,7 @@ export default defineComponent({
     const busca = ref()
     const expanded = ref([])
     const $q = useQuasar()
-    const products = ref(
-      [{
-        id: 1,
-        name: 'Chainsaw Man vol.1',
-        city: 'Maringá',
-        cd_uf: 'PR',
-        price: '14.25',
-        url_image: 'public/chain.jpg'
-      }, {
-        id: 2,
-        name: 'Jujutsu Kaisen vol.1',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '20.50',
-        url_image: 'public/jujutsu-kaisen.jpg'
-      }, {
-        id: 3,
-        name: 'Mob Psycho 100 vol.1',
-        city: 'Jandaia do Sul',
-        cd_uf: 'PR',
-        price: '78.25',
-        url_image: 'public/mobpsycho.jpg'
-      }, {
-        id: 4,
-        name: 'Chainsaw Man vol.2',
-        city: 'Curitiba',
-        cd_uf: 'PR',
-        price: '14.25',
-        url_image: 'public/chain.jpg'
-      }, {
-        id: 5,
-        name: 'Jujutsu Kaisen vol.2',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '20.50',
-        url_image: 'public/jujutsu-kaisen.jpg'
-      }, {
-        id: 6,
-        name: 'Mob Psycho 100 vol.2',
-        city: 'Jandaia do Sul',
-        cd_uf: 'PR',
-        price: '78.25',
-        url_image: 'public/mobpsycho.jpg'
-      }
-      ])
+    const products = ref()
     const inCart = ref([])
     const showCart = ref(false)
 
@@ -192,6 +149,22 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer
     }
+  },
+  data () {
+    return {
+      mangas: []
+    }
+  },
+  methods: {
+    listar () {
+      MangaDataService.listar().then((response) => {
+        this.products = response.data
+        console.log(this.products)
+      })
+    }
+  },
+  mounted () {
+    this.listar()
   }
 })
 </script>

@@ -134,7 +134,7 @@ export default defineComponent({
         owner: 'Valentas'
       }, {
         id: 4,
-        name: 'Jujutsu Kaisen vol.10',
+        name: 'Chainsaw Man vol.10',
         city: 'São Paulo',
         cd_uf: 'SP',
         price: '27.50',
