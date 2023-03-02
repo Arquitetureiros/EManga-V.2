@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
@@ -6,7 +5,7 @@ from django.http.response import JsonResponse
 from emanga.models import Usuario
 from emanga.serializers import UsuarioSerializer
 
-# Create your views here.
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 @csrf_exempt
 def usuarioApi(request, id=0):
@@ -33,3 +32,8 @@ def usuarioApi(request, id=0):
         usuario = Usuario.objects.get(id = id)
         usuario.delete()
         return JsonResponse("Deleted Sucessfuly", safe=False)
+    
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+class UsuarioTokenObtainPairView(TokenObtainPairView):
+    serializer_class = UsuarioSerializer
