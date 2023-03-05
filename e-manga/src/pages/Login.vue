@@ -13,11 +13,11 @@
 
           <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
 
-            <q-input ref="emailRef" outlined v-model="email" type="email" label="Email *" :dense="dense" lazy-rules :rules="emailRules" />
+            <q-input ref="emailRef" outlined v-model="usuario.email" type="email" label="Email *" :dense="dense" lazy-rules :rules="emailRules" />
 
-            <q-input ref="passwRef" v-model="password" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
+            <q-input ref="passwRef" v-model="usuario.senha" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
             <div>
-              <q-btn label="Entrar" type="submit" color="positive" style="width:100%"/>
+              <q-btn label="Entrar" @click="Logar" color="positive" style="width:100%"/>
 
             </div>
             <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
@@ -56,6 +56,8 @@ import { useQuasar } from 'quasar'
 import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
+
+import UsuarioDataService from '../services/UsuarioDataService'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -126,6 +128,29 @@ export default defineComponent({
         emailRef.value.resetValidation()
         passwRef.value.resetValidation()
       }
+    }
+  },
+
+  data () {
+    return {
+      usuario: {
+        email: '',
+        senha: ''
+      }
+    }
+  },
+  methods: {
+    Logar () {
+      const data = {
+        email: this.usuario.email,
+        senha: this.usuario.senha
+      }
+
+      UsuarioDataService.logar(data)
+        .then((response) => {
+          localStorage.setItem('jwt', JSON.stringify(response.data))
+          console.log(localStorage.getItem('jwt'))
+        })
     }
   }
 })

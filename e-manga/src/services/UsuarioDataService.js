@@ -9,16 +9,20 @@ class ClienteDataService {
     return http.get('/usuario/')
   }
 
-  cadastrar (cliente) {
-    return http.post('/usuario', cliente)
+  cadastrar (usuario) {
+    return http.post('/usuario', usuario)
   }
 
-  atualizar (id, cliente) {
-    return http.put('/usuario/', cliente)
+  atualizar (id, usuario) {
+    return http.put('/usuario/', usuario)
   }
 
   async deletar (id) {
     return await http.delete(`/usuario/${id}`)
+  }
+
+  logar (usuario) {
+    return http.post('/login/', usuario)
   }
 }
 
