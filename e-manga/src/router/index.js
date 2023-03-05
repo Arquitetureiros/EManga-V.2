@@ -26,5 +26,18 @@ export default route(function (/* { store, ssrContext } */) {
     history: createHistory(process.env.VUE_ROUTER_BASE)
   })
 
+  Router.beforeEach((to, from) => {
+    if (to.meta.requiresAuth) {
+      if (localStorage.getItem('jwt')) {
+        // console.log('liberado')
+      } else {
+        return {
+          path: '/login',
+          query: { redirect: to.fullPath }
+        }
+      }
+    }
+  })
+
   return Router
 })

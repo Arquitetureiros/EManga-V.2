@@ -149,7 +149,7 @@ export default defineComponent({
       UsuarioDataService.logar(data)
         .then((response) => {
           localStorage.setItem('jwt', JSON.stringify(response.data))
-          console.log(localStorage.getItem('jwt'))
+          this.$router.push(this.$route.query.redirect)
         })
     }
   }

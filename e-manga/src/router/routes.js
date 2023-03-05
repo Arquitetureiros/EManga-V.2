@@ -12,11 +12,13 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue')
+    component: () => import('pages/ErrorNotFound.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/pagamentos',
-    component: () => import('pages/IndexPagamento.vue')
+    component: () => import('pages/IndexPagamento.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/cadastro',
@@ -24,19 +26,23 @@ const routes = [
   },
   {
     path: '/manterManga',
-    component: () => import('pages/ManterManga.vue')
+    component: () => import('pages/ManterManga.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/meusProdutos',
-    component: () => import('pages/meusProdutos.vue')
+    component: () => import('pages/meusProdutos.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/acompanharpedido',
-    component: () => import('pages/AcompanharPedido.vue')
+    component: () => import('pages/AcompanharPedido.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/buscar',
-    component: () => import('pages/BuscaProduto.vue')
+    component: () => import('pages/BuscaProduto.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -44,7 +50,8 @@ const routes = [
   },
   {
     path: '/editarperfil',
-    component: () => import('pages/EditarPerfil.vue')
+    component: () => import('pages/EditarPerfil.vue'),
+    meta: { requiresAuth: true }
   }
 ]
 
