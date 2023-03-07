@@ -11,8 +11,8 @@
         </div>
         <div>
               <div class="row justify-center">
-               <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar mangá"/>    <!-- adicionar function para receber o valor e levar para outra tela  -->
-                <q-btn to="/buscar" class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
+               <q-input style="width: 259px;" dense outlined v-model="tituloBuscar" @input="buscarManga" label="Pesquisar mangá"/>
+                <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarManga ()"/>
               </div>
         </div>
 
@@ -90,6 +90,7 @@
   </q-layout>
 </template>
 <script>
+
 import { useQuasar } from 'quasar'
 import { defineComponent, ref } from 'vue'
 import MarketCart from 'components/MarketCart.vue'
@@ -120,6 +121,10 @@ export default defineComponent({
       this.$router.push('/verManga')
     }
 
+    function buscarManga () {
+      this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscar } })
+    }
+
     function addToCart (product) {
       inCart.value.push(product)
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
@@ -139,6 +144,7 @@ export default defineComponent({
       nrItens,
       busca,
       expanded,
+      buscarManga,
       acessarAnuncio,
       $q,
       addToCart,
@@ -152,7 +158,8 @@ export default defineComponent({
   },
   data () {
     return {
-      mangas: []
+      mangas: [],
+      tituloBuscar: ''
     }
   },
   methods: {

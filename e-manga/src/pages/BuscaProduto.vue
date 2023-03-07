@@ -20,15 +20,14 @@
 
             <div v-for="(product, p) in products" :key="p">
               <q-card id="my-card"  class="col-3 col-md-2 bg-grey-3 q-ma-lg q-hoverable">
-                <div v-ripple @click="acessarAnuncio" class="cursor-pointer relative-position">
-                  <img :src=product.url_image class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
+                <div v-ripple @click="acessarAnuncio()" class="cursor-pointer relative-position">
+                  <img :src=product.fotoCaminho class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
                   <span class="q-focus-helper"></span>
                 </div>
                  <q-card-section>
-                      <span class="text-subtitle2"> {{product.name}} </span><br>
-                      <span class="text-subtitle3 text-grey" >{{ product.owner }} </span>
+                      <span class="text-subtitle2"> {{product.ds_titulo}} </span><br>
                       <div class="row justify-between">
-                        <span class="text-subtitle2 text-green-14" >R$ {{ product.price }} </span>
+                        <span class="text-subtitle2 text-green-14" >R$ {{ product.valor }} </span>
                         <div>
                           <q-btn
                             color="grey-8"
@@ -54,7 +53,7 @@
                   <div v-show="expanded[p]">
                     <q-separator />
                     <q-card-section class="text-subitle2">
-                     {{product.city}} - {{product.cd_uf}}
+                      {{product.cidade}} - {{product.estado}}
                     </q-card-section>
                   </div>
                 </q-slide-transition>
@@ -91,6 +90,7 @@ import { defineComponent, ref } from 'vue'
 import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
+import MangaDataService from 'src/services/MangaDataService'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -106,50 +106,8 @@ export default defineComponent({
     const nrItens = ref(1)
     const busca = ref()
     const expanded = ref([])
+    const products = ref()
     const $q = useQuasar()
-    const products = ref(
-      [{
-        id: 1,
-        name: 'Chainsaw Man vol.1',
-        city: 'Maringá',
-        cd_uf: 'PR',
-        price: '14.25',
-        url_image: 'public/chain.jpg',
-        owner: 'Yuripa Mangás'
-      }, {
-        id: 2,
-        name: 'Chainsaw Man vol.10',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '20.50',
-        url_image: 'public/chainsaw.jpg',
-        owner: 'Valentas'
-      }, {
-        id: 3,
-        name: 'Chainsaw Man vol.9',
-        city: 'Maringá',
-        cd_uf: 'PR',
-        price: '17.25',
-        url_image: 'public/chainsa-vol-9.jpg',
-        owner: 'Valentas'
-      }, {
-        id: 4,
-        name: 'Chainsaw Man vol.10',
-        city: 'São Paulo',
-        cd_uf: 'SP',
-        price: '27.50',
-        url_image: 'public/chainsaw.jpg',
-        owner: 'Valentas'
-      }, {
-        id: 5,
-        name: 'Chainsaw Man vol.1',
-        city: 'Maringá',
-        cd_uf: 'PR',
-        price: '10.25',
-        url_image: 'public/chain.jpg',
-        owner: 'Valentas'
-      }
-      ])
     const inCart = ref([])
     const showCart = ref(false)
 
@@ -160,6 +118,7 @@ export default defineComponent({
     }
 
     function addToCart (product) {
+      console.log(this.$route.query.titulo)
       inCart.value.push(product)
       product.inOrder = true
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
@@ -189,6 +148,26 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer
     }
+  },
+  data () {
+    return {
+      mangas: [],
+      tituloBusca: this.$route.query.titulo
+    }
+  },
+  methods: {
+    listarFiltros () {
+      MangaDataService.listar().then((response) => {
+        const mangasFiltrados = response.data.filter((mangas) => {
+          return mangas.ds_titulo.toLowerCase().includes(this.tituloBusca.toLowerCase())
+        })
+        this.products = mangasFiltrados
+        console.log(this.products)
+      })
+    }
+  },
+  mounted () {
+    this.listarFiltros()
   }
 })
 </script>
