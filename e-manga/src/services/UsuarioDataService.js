@@ -1,7 +1,7 @@
 import http from '../http-common'
 
 class ClienteDataService {
-  obterPorId (id) {
+  obter (id) {
     return http.get(`/usuario/${id}`)
   }
 

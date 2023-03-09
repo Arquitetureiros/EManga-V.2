@@ -9,7 +9,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 @csrf_exempt
 def usuarioApi(request, id=0):
-    if request.method == 'GET':
+    if request.method == 'GET' and id != 0:
+        usuario = Usuario.objects.get(id = id)
+        serializer = UsuarioSerializer(usuario)
+        return JsonResponse(serializer.data)
+    elif request.method == 'GET':
+        print('entrou aqui 2')
         usuarios = Usuario.objects.all()
         usuario_serializer = UsuarioSerializer(usuarios, many = True)
         return JsonResponse(usuario_serializer.data, safe=False)
