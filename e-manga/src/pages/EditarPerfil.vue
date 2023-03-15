@@ -17,20 +17,20 @@
       </div>
 
       <form action="" class="q-gutter-lg">
-        <q-input ref="" outlined v-model="name" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        <q-input ref="" outlined v-model="usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
 
         <div class="row" style="flex-wrap: nowrap; width: 100%;">
-          <q-input style="width: 70%;" ref="" outlined v-model="name" label="Cep" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 70%;" ref="" outlined v-model="usuario.cep" label="Cep" :dense="dense" lazy-rules :rules="nameRules" />
 
-          <q-input style="width: 30%;" ref="" outlined v-model="name" label="Num" :dense="dense" lazy-rules :rules="nameRules"/>
+          <q-input style="width: 30%;" ref="" outlined v-model="usuario.num" label="Num" :dense="dense" lazy-rules :rules="nameRules"/>
         </div>
 
-        <q-input ref="" outlined v-model="name" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        <q-input ref="" outlined v-model="usuario.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
 
         <div class="row" style="flex-wrap: nowrap; width: 100%;">
-          <q-input style="width: 70%;" ref="" outlined v-model="name" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 70%;" ref="" outlined v-model="usuario.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" />
 
-          <q-input style="width: 30%;" ref="" outlined v-model="name" label="UF" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 30%;" ref="" outlined v-model="usuario.uf" label="UF" :dense="dense" lazy-rules :rules="nameRules" />
         </div>
         <div class="row content-center" style="width: 100%;">
           <q-icon name="font_download" size="25px" color="green"/>
@@ -94,6 +94,10 @@ import { defineComponent, ref } from 'vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
+import UsuarioDataService from 'src/services/UsuarioDataService'
+import EnderecoDataService from 'src/services/EnderecoDataService'
+import jwtDecode from 'jwt-decode';
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -110,6 +114,44 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
+  },
+
+  data () {
+    return {
+      usuario: {
+        nome: '',
+        cep: '',
+        num: '',
+        logradouro: '',
+        cidade: '',
+        uf: ''
+      }
+    }
+  },
+  methods: {
+    CarregarDados () {
+      const token = localStorage.getItem('jwt');
+      if(!token) { return; }
+
+      const decodedToken = jwtDecode(token);
+
+      UsuarioDataService.obter(decodedToken['user_id'])
+        .then((response) => {
+          this.usuario = response.data
+          EnderecoDataService.listarPorUsuario(decodedToken['user_id'])
+            .then((response) => {
+              this.usuario.cep = response.data[0].cep
+              this.usuario.num = response.data[0].num
+              this.usuario.logradouro = response.data[0].logradouro
+              this.usuario.cidade = response.data[0].cidade
+              this.usuario.uf = response.data[0].uf
+            })
+        })
+    }
+  },
+  mounted()
+  {
+    this.CarregarDados();
   }
 })
 </script>

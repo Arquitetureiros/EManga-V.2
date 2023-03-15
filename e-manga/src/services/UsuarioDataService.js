@@ -1,6 +1,6 @@
 import http from '../http-common'
 
-class ClienteDataService {
+class UsuarioDataService {
   obter (id) {
     return http.get(`/usuario/${id}`)
   }
@@ -26,4 +26,4 @@ class ClienteDataService {
   }
 }
 
-export default new ClienteDataService()
+export default new UsuarioDataService()

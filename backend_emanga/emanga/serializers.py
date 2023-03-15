@@ -1,21 +1,22 @@
 from rest_framework import serializers
-from emanga.models import Usuario
+from emanga.models import Usuario, Endereco
 
 from rest_framework_simplejwt.tokens import RefreshToken
+
+class EnderecoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Endereco
+        fields = '__all__'
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model=Usuario
         fields=('id', 'nome', 'email', 'senha')
         extra_kwargs = {
-            'nome': {'required': False}
+            'nome': {'required': False},
+            'email': {'required': True},
+            'senha': {'required': True}
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.fields['email'] = serializers.CharField()
-        self.fields['senha'] = serializers.CharField()
 
     def validate(self, attrs):
         email = attrs.get('email')
@@ -35,7 +36,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
                 return data
 
             else:
-                raise serializers.ValidationError('Usuário não encontrado ou senha inválida.')
+                return attrs
         else:
             raise serializers.ValidationError('Email e senha são obrigatórios.')
     
