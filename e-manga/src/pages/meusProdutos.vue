@@ -21,11 +21,11 @@
             <div v-for="(product, p) in products" :key="p">
               <q-card id="my-card"  class="col-3 col-md-2 bg-grey-3 q-ma-lg q-hoverable">
                 <div v-ripple to="/verManga" class="cursor-pointer relative-position">
-                  <img :src=product.url_image class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
+                  <img :src=product.fotoCaminho class="q-pa-md" style="height: 250px; width: 230px; border-radius: 20px;"/>
                   <span class="q-focus-helper"></span>
                 </div>
                  <q-card-section>
-                      <span class="text-subtitle2"> {{product.name}} </span><br>
+                      <span class="text-subtitle2"> {{product.ds_titulo}} </span><br>
                       <div class="row justify-between">
                         <span class="text-subtitle2 text-green-14" ></span>
                         <div>
@@ -35,7 +35,7 @@
                             flat
                             dense
                             icon="fa-solid fa-pencil"
-                            to="/editarManga"
+                            @click="editarManga(product.id)"
                           >
                             <q-tooltip>
                               Editar mangá
@@ -86,6 +86,8 @@ import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 
+import MangaDataService from 'src/services/MangaDataService'
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -102,10 +104,7 @@ export default defineComponent({
     const expanded = ref([])
     const $q = useQuasar()
     const $router = useQuasar()
-    const products = ref(
-      [{
-      }
-      ])
+    const products = ref()
     const inCart = ref([])
     const showCart = ref(false)
     function acessarAnuncio () {
@@ -142,6 +141,25 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer
     }
+  },
+  data () {
+    return {
+      mangas: []
+    }
+  },
+  methods: {
+    listar () {
+      MangaDataService.listar().then((response) => {
+        this.products = response.data // atualiza o objeto products com a lista de mangas recebida
+        console.log(this.products)
+      })
+    },
+    editarManga (id) {
+      this.$router.push(`/editarManga/${id}`)
+    }
+  },
+  mounted () {
+    this.listar()
   }
 })
 </script>

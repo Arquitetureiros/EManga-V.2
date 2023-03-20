@@ -2,11 +2,11 @@ import http from '../http-common'
 
 class MangaDataService {
   obterPorId (id) {
-    return http.get(`/manga/${id}`)
+    return http.get(`/manga?id=${id}`)
   }
 
   listar () {
-    return http.get('/manga/')
+    return http.get('/manga')
   }
 
   cadastrar (manga) {
@@ -14,7 +14,7 @@ class MangaDataService {
   }
 
   atualizar (id, manga) {
-    return http.put('/manga/', manga)
+    return http.put(`/manga?id=${id}`, id, manga)
   }
 
   async deletar (id) {

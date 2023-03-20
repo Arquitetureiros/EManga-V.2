@@ -5,7 +5,7 @@ from emanga.models import manga, produto
 class MangaSerializer(serializers.ModelSerializer):
   class Meta:
     model=manga
-    fields=('id', 'ds_sinopse', 'ds_titulo', 'valor', 'fotoCaminho', 'quantidade')
+    fields=('id', 'ds_titulo','ds_sinopse', 'cidade', 'estado', 'valor', 'fotoCaminho', 'quantidade')
 
 class ProdutoSerializer(serializers.ModelSerializer):
   class Meta:

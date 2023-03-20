@@ -9,62 +9,114 @@
         <div class="text-h4 q-pa-md">
         </div>
         <div class="items-center flex justify-around" style="height: auto; width: 60%;">
-          <div class="">
-              Atuali imagens:
-              <div style="padding: 40px" >
-                  <img src="public/chain.jpg" style="height: 400px; width: 280px" alt="">
+          <div className="q-pt-md">
+            Atualizar imagens :
+            <div style="width: 200px; height: 300px" className="q-pt-lg relative-position">
+              <q-img
+                      v-if="mangaAtt.fotoCaminho"
+                      :src=mangaAtt.fotoCaminho
+                      spinner-color="white"
+                      style="height: 100%; width: 100%"
+                      className="absolute-center"
+              ></q-img>
+            </div>
+            <div style="display: flex; margin-top: 10px; justify-content: space-between;">
+              <div style="max-width: 80px; max-height: 80px" className="q-pt-lg relative-position">
+              <q-file v-model="image2"
+                      label="+"
+                      filled
+                      style="background-color: #eee; width: 100%; height: 100%"
+                      >
+              </q-file>
+              <q-img
+                      v-if="imageUrl2"
+                      :src="imageUrl2"
+                      spinner-color="white"
+                      style="height: 100%; width: 100%"
+                      className="absolute-center"
+                      accept=".jpg, image/*"
+              ></q-img>
               </div>
-              <div style="display: flex; margin-top: 10px; justify-content: space-between;">
-                <q-file color="red" v-model="imagem1" style="background-color: #eee; height: 80px; width: 80px" accept=".jpg, image/*">
-                <template v-slot:prepend>
-                </template>
+              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
+              <q-file v-model="image3"
+                      label="+"
+                      filled
+                      style="background-color: #eee; width: 100%; height: 100%"
+                      >
               </q-file>
-              <q-file color="red" v-model="imagem2" style="background-color: #eee; height: 80px; width: 80px" accept=".jpg, image/*">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
-              <q-file color="red" v-model="imagem3" style="background-color: #eee; height: 80px; width: 80px" accept=".jpg, image/*">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
-              <q-file color="red" v-model="imagem4" style="background-color: #eee; height: 80px; width: 80px" accept=".jpg, image/*">
-                <template v-slot:prepend>
-                </template>
-              </q-file>
+              <q-img
+                      v-if="imageUrl3"
+                      :src="imageUrl3"
+                      spinner-color="white"
+                      style="height: 100%; width: 100%"
+                      className="absolute-center"
+                      accept=".jpg, image/*"
+              ></q-img>
               </div>
+              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
+              <q-file v-model="image4"
+                      label="+"
+                      filled
+                      style="background-color: #eee; width: 100%; height: 100%"
+                      >
+              </q-file>
+              <q-img
+                      v-if="imageUrl4"
+                      :src="imageUrl4"
+                      spinner-color="white"
+                      style="height: 100%; width: 100%"
+                      className="absolute-center"
+                      accept=".jpg, image/*"
+              ></q-img>
+              </div>
+              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
+              <q-file v-model="image5"
+                      label="+"
+                      filled
+                      style="background-color: #eee; width: 100%; height: 100%"
+                      >
+              </q-file>
+              <q-img
+                      v-if="imageUrl5"
+                      :src="imageUrl5"
+                      spinner-color="white"
+                      style="height: 100%; width: 100%"
+                      className="absolute-center"
+              ></q-img>
+              </div>
+            </div>
           </div>
           <div class="">
             <div class="q-pa-md" style="max-width: 300px">
               Atualizar titulo do anúncio:
-              <q-input outlined v-model="titulo" label="Titulo"/>
+              <q-input outlined v-model="mangaAtt.ds_titulo" label="Titulo" />
             </div>
             <div class="q-pa-md" style="max-width: 300px">
-              Atualizar descrição do anúncio:
-              <q-input
-                 v-model="desc"
-                 outlined
-                 type="textarea"
-              />
+              Atualizar descrição do anúncio: <br>
+              <q-input v-model="mangaAtt.ds_sinopse" outlined type="textarea" />
+            </div>
+            <div class="q-pa-md row" style="max-width: 400px">
+              <div class="q-pr-md" style="max-width: 150px">
+                Cidade
+                <q-input outlined v-model="mangaAtt.cidade" label="Cidade" />
+              </div>
+              <div class="q-pr-md" style="max-width: 150px">
+                Estado abrevidado:
+                <q-input outlined v-model="mangaAtt.estado" label="Estado" />
+              </div>
             </div>
             <div class="q-pa-md row" style="max-width: 300px">
               <div class="q-pr-md" style="max-width: 300px">
                 Quantidade:
-                <q-input
-                   v-model.number="quant"
-                   type="number"
-                   style="max-width: 100px"
-                   dense
-                   outlined
-                />
+                <q-input v-model.number="mangaAtt.quantidade" type="number" style="max-width: 100px" dense outlined />
               </div>
               <div class="q-pr-md" style="max-width: 300px">
                 Preço:
-                <q-input outlined v-model="number" type="number" prefix="R$" dense style="max-width: 100px"/>
+                <q-input outlined v-model="mangaAtt.valor" type="number" prefix="R$" dense style="max-width: 100px" />
               </div>
-            </div>
-            <div class="q-pa-md q-gutter-sm">
-              <q-btn  to="/meusProdutos" color="primary" label="Desativar anúncio"/>
-              <q-btn  to="/meusProdutos" color="primary" label="Atualizar anúncio"/>
+              <div class="q-pa-md">
+                <q-btn color="primary" to="/meusProdutos" label="Atualizar anúncio" @click="AtualizarManga" />
+              </div>
             </div>
           </div>
         </div>
@@ -96,6 +148,8 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 
+import MangaDataService from 'src/services/MangaDataService'
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -115,6 +169,8 @@ export default defineComponent({
     const imagem2 = ref()
     const imagem3 = ref()
     const imagem4 = ref()
+    const product = ref()
+    const manga = ref()
 
     return {
       leftDrawerOpen,
@@ -129,8 +185,48 @@ export default defineComponent({
       imagem1,
       imagem2,
       imagem3,
-      imagem4
+      imagem4,
+      product,
+      manga
     }
+  },
+  data () {
+    return {
+      mangaAtt: {}
+    }
+  },
+  methods: {
+    obterPorId () {
+      const id = this.$route.params.id // Obter o ID da rota
+      Number(id)
+      MangaDataService.obterPorId(id).then((response) => {
+        this.product = response.data
+        console.log(this.product)
+        this.manga = this.product[0]
+        console.log(this.manga)
+
+        this.mangaAtt = {
+          id: this.manga.id,
+          ds_titulo: this.manga.ds_titulo,
+          ds_sinopse: this.manga.ds_sinopse,
+          cidade: this.manga.cidade,
+          estado: this.manga.estado,
+          valor: this.manga.valor,
+          fotoCaminho: this.manga.fotoCaminho,
+          quantidade: this.manga.quantidade
+        }
+      })
+    },
+    AtualizarManga () {
+      console.log(this.mangaAtt)
+      MangaDataService.atualizar(this.mangaAtt)
+        .then(() => {
+          alert('manga atualizado')
+        })
+    }
+  },
+  mounted () {
+    this.obterPorId()
   }
 })
 </script>

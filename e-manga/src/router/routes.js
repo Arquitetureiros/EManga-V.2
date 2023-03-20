@@ -43,7 +43,7 @@ const routes = [
     component: () => import('pages/verManga.vue')
   },
   {
-    path: '/editarManga',
+    path: '/editarManga/:id',
     component: () => import('pages/editarManga.vue')
   }
 ]

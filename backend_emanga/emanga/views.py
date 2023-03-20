@@ -22,7 +22,11 @@ def receber_dado(request):
 @csrf_exempt
 def mangaApi(request, id=0):
   if request.method=='GET':
-    mangas = manga.objects.all()
+    id = request.GET.get('id')
+    if id:
+        mangas = manga.objects.filter(id=id)
+    else:
+        mangas = manga.objects.all()
     manga_serializer = MangaSerializer(mangas, many=True)
     return JsonResponse(manga_serializer.data, safe=False)
   elif request.method=='POST':
@@ -32,13 +36,13 @@ def mangaApi(request, id=0):
       manga_serializer.save()
       return JsonResponse("adicionado com sucesso", safe=False)
     return JsonResponse("falha na adição", safe=False)
-  elif request.method=='PUT':
+  elif request.method == 'PUT':
     manga_data = JSONParser().parse(request)
     mangas = manga.objects.get(id=manga_data['id'])
     manga_serializer = MangaSerializer(mangas, data=manga_data)
     if manga_serializer.is_valid():
-      manga_serializer.save()
-      return JsonResponse("atualização feita", safe=False)
+        manga_serializer.save()
+        return JsonResponse("atualização feita", safe=False)
     return JsonResponse("falha na atualização")
   elif request.method=="DELETE":
     mangas = manga.objects.get(id = id)
