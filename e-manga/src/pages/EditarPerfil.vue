@@ -19,22 +19,25 @@
       <form action="" class="q-gutter-lg">
         <q-input ref="" outlined v-model="usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
 
-        <div class="row" style="flex-wrap: nowrap; width: 100%;">
-          <q-input style="width: 70%;" ref="" outlined v-model="usuario.cep" label="Cep" :dense="dense" lazy-rules :rules="nameRules" />
+        <q-input ref="" outlined v-model="usuario.email" label="Email" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
 
-          <q-input style="width: 30%;" ref="" outlined v-model="usuario.num" label="Num" :dense="dense" lazy-rules :rules="nameRules"/>
+        <div class="row" style="flex-wrap: nowrap; width: 100%;">
+          <q-input style="width: 70%;" ref="" outlined v-model="endereco.cep" label="Cep" :dense="dense" lazy-rules :rules="nameRules" />
+
+          <q-input style="width: 30%;" ref="" outlined v-model="endereco.num" label="Num" :dense="dense" lazy-rules :rules="nameRules"/>
         </div>
 
-        <q-input ref="" outlined v-model="usuario.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        <q-input ref="" outlined v-model="endereco.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
 
         <div class="row" style="flex-wrap: nowrap; width: 100%;">
-          <q-input style="width: 70%;" ref="" outlined v-model="usuario.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 70%;" ref="" outlined v-model="endereco.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" />
 
-          <q-input style="width: 30%;" ref="" outlined v-model="usuario.uf" label="UF" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 30%;" ref="" outlined v-model="endereco.uf" label="UF" :dense="dense" lazy-rules :rules="nameRules" />
         </div>
         <div class="row content-center" style="width: 100%;">
-          <q-icon name="font_download" size="25px" color="green"/>
-          Novo Endereço
+          <q-btn style="width: 100%; padding: 0;" label="Editar Endereço" color="positive" @click="AtualizarEndereco"/>
+          <!--<q-icon name="font_download" size="25px" color="green"/>
+          Novo Endereço-->
         </div>
 
         <q-card class="my-card" style="width: 100%;">
@@ -64,7 +67,7 @@
           </q-card-actions>
         </q-card>
 
-        <q-btn style="width: 100%; padding: 0;" label="Salvar Perfil" color="positive" type="submit"/>
+        <q-btn style="width: 100%; padding: 0;" label="Salvar Perfil" color="positive" @click="SalvarPerfil"/>
       </form>
     </div>
     </q-page-container>
@@ -119,7 +122,14 @@ export default defineComponent({
   data () {
     return {
       usuario: {
+        id: '',
         nome: '',
+        email: '',
+        senha: ''
+      },
+      endereco: {
+        id: '',
+        user_id: '',
         cep: '',
         num: '',
         logradouro: '',
@@ -138,14 +148,32 @@ export default defineComponent({
       UsuarioDataService.obter(decodedToken['user_id'])
         .then((response) => {
           this.usuario = response.data
-          EnderecoDataService.listarPorUsuario(decodedToken['user_id'])
-            .then((response) => {
-              this.usuario.cep = response.data[0].cep
-              this.usuario.num = response.data[0].num
-              this.usuario.logradouro = response.data[0].logradouro
-              this.usuario.cidade = response.data[0].cidade
-              this.usuario.uf = response.data[0].uf
-            })
+            
+        })
+
+        EnderecoDataService.listarPorUsuario(decodedToken['user_id'])
+          .then((response) => {
+            console.log(response)
+            this.endereco = response.data[0];
+          })
+    },
+    AtualizarEndereco()
+    {
+      const data = this.endereco;
+
+      EnderecoDataService.atualizar(data)
+        .then((response) => {
+            
+        })
+    },
+    SalvarPerfil()
+    {
+      const data = this.usuario
+      console.log(data)
+
+      UsuarioDataService.atualizar(data)
+        .then((response) => {
+          this.AtualizarEndereco()
         })
     }
   },

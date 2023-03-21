@@ -13,12 +13,12 @@ class EnderecoDataService {
     return http.get(`/endereco/usuario/${id}`)
   }
 
-  cadastrar (usuario) {
-    return http.post('/endereco', usuario)
+  cadastrar (endereco) {
+    return http.post('/endereco', endereco)
   }
 
-  atualizar (id, usuario) {
-    return http.put('/endereco/', usuario)
+  atualizar (endereco) {
+    return http.put('/endereco', endereco)
   }
 
   async deletar (id) {

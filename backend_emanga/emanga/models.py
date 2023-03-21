@@ -9,8 +9,8 @@ class Usuario(models.Model):
 class Endereco(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    cep = models.CharField(max_length=9)
-    logradouro = models.CharField(max_length=100)
-    num = models.CharField(max_length=10)
-    cidade = models.CharField(max_length=100)
-    uf = models.CharField(max_length=2)
+    cep = models.CharField(max_length=9, default=None, blank=True, null=True)
+    logradouro = models.CharField(max_length=100, default=None, blank=True, null=True)
+    num = models.CharField(max_length=10, default=None, blank=True, null=True)
+    cidade = models.CharField(max_length=100, default=None, blank=True, null=True)
+    uf = models.CharField(max_length=2, default=None, blank=True, null=True)

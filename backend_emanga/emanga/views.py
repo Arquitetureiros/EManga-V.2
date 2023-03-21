@@ -21,10 +21,8 @@ def usuarioApi(request, id=0):
         usuario_data = JSONParser().parse(request)
         usuario_serializer = UsuarioSerializer(data=usuario_data)
         if usuario_serializer.is_valid():
-            print("adslkjm")
             usuario_serializer.save()
             return JsonResponse("Added Succesfuly", safe=False)
-        print(usuario_serializer.errors)
         return JsonResponse("Failed to Add", safe=False)
     elif request.method == 'PUT':
         usuario_data=JSONParser().parse(request)

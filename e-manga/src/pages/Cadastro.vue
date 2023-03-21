@@ -61,6 +61,9 @@ import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 
 import UsuarioDataService from '../services/UsuarioDataService'
+import EnderecoDataService from 'src/services/EnderecoDataService'
+
+import jwtDecode from 'jwt-decode';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -107,7 +110,33 @@ export default defineComponent({
 
       UsuarioDataService.cadastrar(data)
         .then(() => {
-          this.$router.push('login')
+          const login = {
+            email: this.usuario.email,
+            senha: this.usuario.senha
+            }
+
+          UsuarioDataService.logar(login)
+            .then((response) => {
+              localStorage.setItem('jwt', JSON.stringify(response.data))
+
+              const token = localStorage.getItem('jwt');
+
+              const decodedToken = jwtDecode(token);
+
+              const endereco = {
+                user_id: decodedToken['user_id']
+              }
+
+              EnderecoDataService.cadastrar(JSON.stringify(endereco))
+                .then((response) => {
+                })
+
+              if (this.$route.query.redirect) {
+                this.$router.push(this.$route.query.redirect)
+              } else {
+                this.$router.push('/')
+              }
+            })
         })
     }
   }

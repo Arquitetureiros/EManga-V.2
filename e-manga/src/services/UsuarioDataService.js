@@ -13,8 +13,8 @@ class UsuarioDataService {
     return http.post('/usuario', usuario)
   }
 
-  atualizar (id, usuario) {
-    return http.put('/usuario/', usuario)
+  atualizar (usuario) {
+    return http.put('/usuario', usuario)
   }
 
   async deletar (id) {
