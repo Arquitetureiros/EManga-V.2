@@ -14,5 +14,9 @@
   ],
   "[vue]": {
     "editor.defaultFormatter": "octref.vetur"
-  }
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+
 }

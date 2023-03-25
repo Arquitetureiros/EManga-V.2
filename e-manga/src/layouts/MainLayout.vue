@@ -76,7 +76,7 @@ const linksList = [
     link: '#/manterManga'
   },
   {
-    title: 'Carrinho/Pagamento',
+    title: 'Finalizar Pedido',
     icon: 'receipt',
     link: '#/pagamentos'
   },

@@ -64,7 +64,7 @@
                              <div>
                                 <div class="text-h6">Endereço de entrega:</div>
                                 <q-card-section class="text-body1">
-                                   Rua dos Bobos, 0, Formiga - Minas Gerais<br>                        CEP 42069-123
+                                   Rua dos Bobos, 0, Formiga - Minas Gerais<br> CEP 42069-123
                                    <q-btn flat dense color="primary" icon="edit">
                                       <q-tooltip>Editar</q-tooltip>
                                    </q-btn>
@@ -72,10 +72,10 @@
                              </div>
                              <div>
                                 <p class="text-h6">Opções de Frete:</p>
-                                <q-radio v-model="opFrete" val=8.00 label="PAC" color="green" />
-                                <span class="text-positive"> R$8,00</span><br>
-                                <q-radio v-model="opFrete" val=18.00 label="SEDEX" color="green" />
-                                <span class="text-positive"> R$18,00</span>
+                                <div v-for="(frete, d) in dadosEntrega" :key="d">
+                                  <q-radio v-model="opFrete" :val=frete.valor :label="frete.nome" color="green" />
+                                  <span class="text-positive"> R${{frete.valor}} </span> <br>
+                                </div>
                              </div>
                              <div class="text-h6">Total: <span class="text-positive">R$ {{total()}}</span></div>
                           </q-card>
@@ -157,6 +157,7 @@ export default defineComponent({
     const item = ref('My Hero Academia Vol. 1')
     const val = ref([])
     const vendedor = ref('Valentas Mangas Express')
+    const dadosEntrega = ref([])
     const qtd = ref(1)
     const valor = ref(14.90)
     const tab = ref('card')
@@ -196,7 +197,10 @@ export default defineComponent({
     }
     onMounted(() => {
       itensCarrinho.value = JSON.parse(localStorage.getItem('cartProducts'))
-      console.log(itensCarrinho.value)
+      axios.post('http://127.0.0.1:8000/frete').then((response) => {
+        dadosEntrega.value = response.data;
+        console.log(dadosEntrega.value);
+      })
     })
     return {
       leftDrawerOpen,
@@ -218,7 +222,8 @@ export default defineComponent({
       formaPagamento,
       dadosCartao,
       copyText,
-      qrcodeemv
+      qrcodeemv,
+      dadosEntrega
     }
   }
 })

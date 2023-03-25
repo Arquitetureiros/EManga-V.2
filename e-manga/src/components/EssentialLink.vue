@@ -48,7 +48,7 @@ export default defineComponent({
         link: '#/meusProdutos'
       },
       {
-        title: 'Carrinho/Pagamento',
+        title: 'Finalizar Pedido',
         icon: 'fa-solid fa-cart-shopping',
         link: '#/pagamentos'
       }
