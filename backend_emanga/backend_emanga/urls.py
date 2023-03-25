@@ -14,11 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from emanga.views import test_message, return_frete
+
+from emanga.views import UsuarioTokenObtainPairView
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import path, re_path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path('teste', test_message, name='test_message'),
-    re_path('frete', return_frete, name='frete_api')
+    path('admin/', admin.site.urls),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    re_path(r'^', include('emanga.urls')),
+    path('login/', UsuarioTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    ath('teste', test_message, name='test_message'),
+    path('frete', return_frete, name='frete_api')
 ]

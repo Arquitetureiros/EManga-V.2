@@ -9,19 +9,15 @@
       <div class="q-pa-md" style="display: grid; justify-content: center; padding-top:100px;" >
         <div class="q-gutter-y-md column" style="max-width: 300px">
 
-          <span class="text-h5">Cadastre-se</span>
+          <span class="text-h5" style="text-align:center;">Login</span>
 
           <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="onReset" class="q-gutter-md">
 
-            <q-input ref="nameRef" outlined v-model="name" label="Nome *" :dense="dense" lazy-rules :rules="nameRules" />
+            <q-input ref="emailRef" outlined v-model="usuario.email" type="email" label="Email *" :dense="dense" lazy-rules :rules="emailRules" />
 
-            <q-input ref="emailRef" outlined v-model="email" type="email" label="Email *" :dense="dense" lazy-rules :rules="emailRules" />
-
-            <q-input ref="passwRef" v-model="password" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
-            <q-input ref="accPassRef" v-model="acceptPassword" label="Confirmar senha *" outlined :type="password ? 'password' : 'text'" :rules="accPasswRules" />
-
+            <q-input ref="passwRef" v-model="usuario.senha" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
             <div>
-              <q-btn label="Cadastrar" type="submit" color="positive" style="width:100%"/>
+              <q-btn label="Entrar" @click="Logar" color="positive" style="width:100%"/>
 
             </div>
             <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
@@ -61,6 +57,8 @@ import { defineComponent, ref } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 
+import UsuarioDataService from '../services/UsuarioDataService'
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -81,8 +79,6 @@ export default defineComponent({
     const nameRef = ref()
     const emailRef = ref()
     const passwRef = ref()
-    const acceptPassword = ref()
-    const accPassRef = ref()
 
     return {
       leftDrawerOpen,
@@ -93,33 +89,21 @@ export default defineComponent({
       password,
       passwRef,
       isPwd,
-      acceptPassword,
-      accPassRef,
       email,
       emailRef,
-      name,
-      nameRef,
-      nameRules: [
-        val => (val && val.length > 0) || 'Digite um nome'
-      ],
       emailRules: [
         val => (val && val.length > 0) || 'Digite um email'
       ],
       passwRules: [
         val => (val && val.length > 0) || 'Digite uma senha'
       ],
-      accPasswRules: [
-        val => (val && val.length > 0) || 'Digite a mesma senha'
-      ],
       accept,
 
       onSubmit () {
-        nameRef.value.validate()
         emailRef.value.validate()
         passwRef.value.validate()
-        accPassRef.value.validate()
 
-        if (nameRef.value.hasError || emailRef.value.hasError || passwRef.value.hasError || accPassRef.value.hasError) {
+        if (emailRef.value.hasError || passwRef.value.hasError) {
           // form has error
         } else if (accept.value !== true) {
           $q.notify({
@@ -139,13 +123,38 @@ export default defineComponent({
         name.value = null
         email.value = null
         password.value = null
-        acceptPassword.value = null
 
         nameRef.value.resetValidation()
         emailRef.value.resetValidation()
         passwRef.value.resetValidation()
-        accPassRef.value.resetValidation()
       }
+    }
+  },
+
+  data () {
+    return {
+      usuario: {
+        email: '',
+        senha: ''
+      }
+    }
+  },
+  methods: {
+    Logar () {
+      const data = {
+        email: this.usuario.email,
+        senha: this.usuario.senha
+      }
+
+      UsuarioDataService.logar(data)
+        .then((response) => {
+          localStorage.setItem('jwt', JSON.stringify(response.data))
+          if (this.$route.query.redirect) {
+            this.$router.push(this.$route.query.redirect)
+          } else {
+            this.$router.push('/')
+          }
+        })
     }
   }
 })

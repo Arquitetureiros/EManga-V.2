@@ -1,6 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
+import jwtDecode from 'jwt-decode';
 
 /*
  * If not building with SSR mode, you can
@@ -24,6 +25,31 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE)
+  })
+
+  Router.beforeEach((to, from) => {
+    if (to.meta.requiresAuth) {
+        const token = localStorage.getItem('jwt');
+        if(!token) {
+          return {
+            path: '/login',
+            query: { redirect: to.fullPath }
+          }
+        }
+        
+        const decodedToken = jwtDecode(token);
+        
+        const expTimestamp = decodedToken['exp']
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        
+        if (expTimestamp < currentTimestamp) {
+          localStorage.removeItem('jwt')
+          return {
+            path: '/login',
+            query: { redirect: to.fullPath }
+          }
+        }
+    }
   })
 
   return Router
