@@ -7,4 +7,7 @@ urlpatterns = [
     re_path(r'^endereco$', views.enderecoApi),
     re_path(r'^endereco/([0-9]+)$', views.enderecoApi),
     re_path(r'^endereco/usuario/([0-9]+)$', views.enderecoApi),
+    re_path(r'^cartao$', views.cartaoApi),
+    re_path(r'^cartao/([0-9]+)$', views.cartaoApi),
+    re_path(r'^cartao/usuario/([0-9]+)$', views.cartaoApi)
 ]

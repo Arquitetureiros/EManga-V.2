@@ -2,8 +2,8 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 
-from emanga.models import Usuario, Endereco
-from emanga.serializers import UsuarioSerializer, EnderecoSerializer
+from emanga.models import Usuario, Endereco, Cartao
+from emanga.serializers import UsuarioSerializer, EnderecoSerializer, CartaoSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -69,6 +69,40 @@ def enderecoApi(request, id=0):
     elif request.method == 'DELETE':
         endereco = Endereco.objects.get(id = id)
         endereco.delete()
+        return JsonResponse("Deleted Sucessfuly", safe=False)
+    
+@csrf_exempt
+def cartaoApi(request, id=0):
+    if request.method == 'GET' and id != 0 and 'usuario' in request.path:
+        cartoes = Cartao.objects.filter(user_id = id)
+        serializer = CartaoSerializer(cartoes, many= True)
+        return JsonResponse(serializer.data, safe=False)
+    elif request.method == 'GET' and id != 0:
+        cartao = Cartao.objects.get(id = id)
+        serializer = CartaoSerializer(cartao)
+        return JsonResponse(serializer.data)
+    elif request.method == 'GET':
+        cartoes = Cartao.objects.all()
+        cartao_serializer = CartaoSerializer(cartoes, many = True)
+        return JsonResponse(cartao_serializer.data, safe=False)
+    elif request.method == 'POST':
+        cartao_data = JSONParser().parse(request)
+        cartao_serializer = CartaoSerializer(data=cartao_data)
+        if cartao_serializer.is_valid():
+            cartao_serializer.save()
+            return JsonResponse("Added Succesfuly", safe=False)
+        return JsonResponse("Failed to Add", safe=False)
+    elif request.method == 'PUT':
+        cartao_data=JSONParser().parse(request)
+        cartao = Cartao.objects.get(id = cartao_data['id'])
+        cartao_serializer = CartaoSerializer(cartao, data=cartao_data)
+        if cartao_serializer.is_valid():
+            cartao_serializer.save()
+            return JsonResponse("Updated Sucessfuly", safe=False)
+        return JsonResponse("Failed to Update")
+    elif request.method == 'DELETE':
+        cartao = Cartao.objects.get(id = id)
+        cartao.delete()
         return JsonResponse("Deleted Sucessfuly", safe=False)
     
 from rest_framework_simplejwt.views import TokenObtainPairView

@@ -43,33 +43,69 @@
         <q-card class="my-card" style="width: 100%;">
           <q-card-section class="row justify-between">
             <div class="text-h6">Meus Cartões</div>
-            <div class="text-subtitle2">
-              <q-icon name="font_download" size="25px" color="green"/>
+            <q-btn class="text-subtitle2" @click="ToggleAddCartao">
+              <q-icon name="add" size="25px" color="blue"/>
               Novo Cartão
-            </div>
+            </q-btn>
           </q-card-section>
 
           <q-separator />
 
-          <q-card-actions vertical>
-            <div class="row">
-              <q-icon name="font_download" size="25px" color="green"/>
-              <q-btn flat>Cartao 1</q-btn>
-              <p>****</p>
-              <q-icon name="font_download" size="25px" color="green"/>
-            </div>
-            <div class="row">
-              <q-icon name="font_download" size="25px" color="green"/>
-              <q-btn flat>Cartao 2</q-btn>
-              <p>****</p>
-              <q-icon name="font_download" size="25px" color="green"/>
-            </div>
+          <q-card-actions vertical v-for="cartao in cartoes">
+            <div class="row" style="width: 100%;">
+            <q-btn class="row align-items-center">
+              <q-icon name="credit_card" size="25px" color="black"/>
+              <q-btn flat @click="ToggleEditCartao(cartao)">{{ cartao.nome }}</q-btn>
+            </q-btn>
+            <q-icon name="delete" size="25px" color="red" @click="DeletarCartao(cartao.id)"/>
+          </div>
           </q-card-actions>
         </q-card>
 
         <q-btn style="width: 100%; padding: 0;" label="Salvar Perfil" color="positive" @click="SalvarPerfil"/>
       </form>
     </div>
+
+    <q-dialog v-model="addCartao">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Adicionar Cartão</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input ref="" outlined v-model="cartao.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input ref="" outlined v-model="cartao.numero" label="Numero" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <div class="row">
+            <q-input ref="" outlined v-model="cartao.validade" label="Validade" :dense="dense" lazy-rules :rules="nameRules" style="width: 70%;"/>
+            <q-input ref="" outlined v-model="cartao.cvc" label="Cvc" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
+          </div>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn style="width: 100%; padding: 0;" label="Salvar Cartao" color="positive" v-close-popup @click="CriarCartao"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="editCartao">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Editar Cartão</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input ref="" outlined v-model="cartao_aux.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input ref="" outlined v-model="cartao_aux.numero" label="Numero" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <div class="row">
+            <q-input ref="" outlined v-model="cartao_aux.validade" label="Validade" :dense="dense" lazy-rules :rules="nameRules" style="width: 70%;"/>
+            <q-input ref="" outlined v-model="cartao_aux.cvc" label="Cvc" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
+          </div>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn style="width: 100%; padding: 0;" label="Salvar Cartao" color="positive" v-close-popup @click="SalvarCartao"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     </q-page-container>
 
     <q-drawer
@@ -99,6 +135,7 @@ import EssentialLink from 'components/EssentialLink.vue'
 
 import UsuarioDataService from 'src/services/UsuarioDataService'
 import EnderecoDataService from 'src/services/EnderecoDataService'
+import CartaoDataService from 'src/services/CartaoDataService'
 import jwtDecode from 'jwt-decode';
 
 export default defineComponent({
@@ -135,6 +172,23 @@ export default defineComponent({
         logradouro: '',
         cidade: '',
         uf: ''
+      },
+      addCartao: false,
+      editCartao: false,
+      cartoes: [],
+      cartao: {
+        nome: '',
+        user_id: 0,
+        numero: '',
+        validade: '',
+        cvc: ''
+      },
+      cartao_aux: {
+        nome: '',
+        user_id: 0,
+        numero: '',
+        validade: '',
+        cvc: ''
       }
     }
   },
@@ -151,11 +205,16 @@ export default defineComponent({
             
         })
 
-        EnderecoDataService.listarPorUsuario(decodedToken['user_id'])
-          .then((response) => {
-            console.log(response)
-            this.endereco = response.data[0];
-          })
+      EnderecoDataService.listarPorUsuario(decodedToken['user_id'])
+        .then((response) => {
+          this.endereco = response.data[0];
+        })
+
+      CartaoDataService.listarPorUsuario(decodedToken['user_id'])
+        .then((response) => {
+          console.log(response)
+          this.cartoes = response.data;
+        })
     },
     AtualizarEndereco()
     {
@@ -169,12 +228,59 @@ export default defineComponent({
     SalvarPerfil()
     {
       const data = this.usuario
-      console.log(data)
 
       UsuarioDataService.atualizar(data)
         .then((response) => {
           this.AtualizarEndereco()
         })
+    },
+    ToggleAddCartao()
+    {
+      this.addCartao = !this.addCartao;
+    },
+    ToggleEditCartao(cartao)
+    {
+      this.editCartao = !this.editCartao;
+      this.cartao_aux = cartao;
+    },
+    SalvarCartao()
+    {
+      const data = this.cartao_aux
+
+      CartaoDataService.atualizar(data)
+        .then((response) => {
+          console.log(response)
+        })
+    },
+    CriarCartao()
+    {
+      const token = localStorage.getItem('jwt');
+      if(!token) { return; }
+
+      const decodedToken = jwtDecode(token);
+
+      const data = {
+        user_id: decodedToken['user_id'],
+        nome: this.cartao.nome,
+        numero: this.cartao.numero,
+        validade: this.cartao.validade,
+        cvc: this.cartao.cvc
+      }
+
+      CartaoDataService.cadastrar(data)
+      .then((response) => {
+        location.reload();
+        })
+    },
+    DeletarCartao(id)
+    {
+      if(confirm("Tem Certeza que deseja deletar o cartao?"))
+      {
+        CartaoDataService.deletar(id)
+        .then((response) => {
+          location.reload();
+          })
+      }
     }
   },
   mounted()
