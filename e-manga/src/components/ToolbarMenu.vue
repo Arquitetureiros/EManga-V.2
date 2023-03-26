@@ -20,16 +20,26 @@
           </q-tooltip>
         </q-btn>
         <div>
-          <q-btn to="/login" flat color="white" label="Meu Perfil"
+          <q-btn v-if="Logado()" to="/editarperfil" flat color="white" label="Meu Perfil"
           size="13px"
           />
         </div>
         <div>
+          <q-btn v-if="!Logado()" to="/login" flat color="white" label="Entrar/Cadastrar"
+          size="13px"
+          />
+        </div>
+        <div v-if="Logado()">
           <q-btn round>
             <q-avatar size="42px">
               <img src="public/avatar.png">
             </q-avatar>
           </q-btn>
+        </div>
+        <div>
+          <q-btn v-if="Logado()" to="/login" flat color="white" label="Sair"
+          size="13px" @click="Logout"
+          />
         </div>
       </q-toolbar>
       <div class="float-right">
@@ -63,6 +73,19 @@ export default {
     // })
 
     return { showCart, getProductsOnCart, quantityOnCart, getQuantityOnCart }
+  },
+  methods: {
+    Logado()
+    {
+      const token = localStorage.getItem('jwt');
+      if(!token) { return false; }
+      else
+        return true;
+    },
+    Logout()
+    {
+      localStorage.removeItem('jwt')
+    }
   }
 }
 </script>
