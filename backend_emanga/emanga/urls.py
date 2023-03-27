@@ -7,4 +7,8 @@ urlpatterns = [
     re_path(r'^endereco$', views.enderecoApi),
     re_path(r'^endereco/([0-9]+)$', views.enderecoApi),
     re_path(r'^endereco/usuario/([0-9]+)$', views.enderecoApi),
+    re_path(r'^pedido/([0-9]+)$', views.pedidoApi),
+    re_path(r'^pedido', views.pedidoApi),
+    re_path(r'^pagamento', views.pedidoApi),
+    re_path(r'^pedidos/user/([0-9]+)$', views.getPedidosByUser)
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from emanga.models import Usuario, Endereco
+from emanga.models import Usuario, Endereco, Pedido
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -54,3 +54,16 @@ class UsuarioSerializer(serializers.ModelSerializer):
     @classmethod
     def get_token(cls, user):
         return RefreshToken.for_user(user)
+
+class PedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Pedido
+        fields = '__all__'
+        extra_kwargs = {
+            'user_id': {'required': True},
+        }
+    
+    # @classmethod
+    # def get_token(cls, user):
+    #     return RefreshToken.for_user(user)
+

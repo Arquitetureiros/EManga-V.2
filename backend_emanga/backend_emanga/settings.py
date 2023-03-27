@@ -34,8 +34,6 @@ CSRF_COOKIE_SECURE = True
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
-=======
 ALLOWED_HOSTS = [
     'http://localhost:9000',
     '127.0.0.1',
@@ -45,7 +43,6 @@ ALLOWED_HOSTS = [
 CORS_ALLOW_ALL_ORIGINS = True
 
 
->>>>>>> Giovanni-RA118255
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,13 +53,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-<<<<<<< HEAD
-    'corsheaders',
-=======
     'rest_framework_simplejwt',
     'corsheaders',
     'emanga',
->>>>>>> Giovanni-RA118255
 ]
 
 
@@ -113,8 +106,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'emanga',
         'USER': 'root',
-        'PASSWORD': 'Gg#22022002',
-        'HOST': 'localhost',
+        'PASSWORD': 'leo123',
+        'HOST': '127.0.0.1',
         'PORT': '3306'
     }
 }

@@ -2,6 +2,12 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from django.http import JsonResponse
+from rest_framework.parsers import JSONParser
+from django.http.response import JsonResponse
+from emanga.models import Usuario, Endereco, Pedido
+from emanga.serializers import UsuarioSerializer, EnderecoSerializer, PedidoSerializer
+
+from rest_framework_simplejwt.views import TokenObtainPairView
 import json
 
 # from .serializers import ModelSerializer
@@ -12,7 +18,6 @@ def test_message(request):
     body_unicode = request.body.decode('utf-8')
     # Converter a string JSON em um objeto Python
     response = json.loads(body_unicode)
-    print(response['nr_cartao'])
     # Fazer algo com o objeto Python, por exemplo:
     return JsonResponse(response, safe=False, status=200)
 # Create your views here.
@@ -34,14 +39,47 @@ def return_frete(request):
             }
     ]
     return JsonResponse(obj, safe=False, status=200)
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
-from django.http.response import JsonResponse
 
-from emanga.models import Usuario, Endereco
-from emanga.serializers import UsuarioSerializer, EnderecoSerializer
+@csrf_exempt
+def pedidoApi(request, id=0):
+    if request.method == 'GET' and id != 0:
+        usuario = Pedido.objects.get(id = id)
+        serializer = PedidoSerializer(pedido)
+        return JsonResponse(serializer.data)
+    elif request.method == 'GET':
+        pedidos = Pedido.objects.all()
+        pedido_serializer = PedidoSerializer(pedidos, many = True)
+        return JsonResponse(pedido_serializer.data, safe=False)
+    elif request.method == 'POST':
+        pedido_data = JSONParser().parse(request)
 
-from rest_framework_simplejwt.views import TokenObtainPairView
+        return JsonResponse(pedido_data, safe=False)
+        pedido_serializer = PedidoSerializer(data=pedido_data)
+        
+        
+        if pedido_serializer.is_valid():
+            pedido_serializer.save()
+            return JsonResponse("Added Succesfuly", safe=False)
+        return JsonResponse("Failed to Add", safe=False)
+    elif request.method == 'PUT':
+        pedido_data=JSONParser().parse(request)
+        pedido = Pedido.objects.get(id = pedido_data['id'])
+        pedido_serializer = PedidoSerializer(pedido, data=pedido_data)
+        if pedido_serializer.is_valid():
+            pedido_serializer.save()
+            return JsonResponse("Updated Sucessfuly", safe=False)
+        return JsonResponse("Failed to Update")
+    elif request.method == 'DELETE':
+        pedido = Pedido.objects.get(id = id)
+        pedido.delete()
+        return JsonResponse("Deleted Sucessfuly", safe=False)
+
+@csrf_exempt
+def getPedidosByUser(request, id=0):
+     if request.method == 'GET' and id != 0:
+        Pedidos = Pedido.objects.get(user_id = id)
+        serializer = PedidoSerializer(Pedidos)
+        return JsonResponse(serializer.data)
 
 @csrf_exempt
 def usuarioApi(request, id=0):
