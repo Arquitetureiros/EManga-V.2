@@ -19,9 +19,11 @@
                                 <q-card bordered>
                                    <q-card-section horizontal>
                                       <div class="row">
+
                                          <q-checkbox
-                                          v-model="product.inOrder"
+                                          v-model="inOrder[p]"
                                           />
+
                                          <q-img
                                          class="q-my-md"
                                          :src="product.url_image"
@@ -33,7 +35,7 @@
                                             <span class="text-subtitle1" style="opacity: 0.7"> {{ product.city }}, {{ product.cd_uf }}</span>
                                             <div class="row q-pt-xl">
                                                <q-input
-                                               v-model.number="qtd"
+                                               v-model.number="qtd[p]"
                                                dense
                                                type="number"
                                                outlined
@@ -43,9 +45,9 @@
                                                />
                                                <div class="col q-px-md">
                                                 <span>Valor unitário: </span>
-                                                <span class="text-positive">R${{valor}}</span><br>
+                                                <span class="text-positive">R${{product.price}}</span><br>
                                                 <span>Valor total: </span>
-                                                <span class="text-positive">R${{valor*qtd}}</span>
+                                                <span class="text-positive">R${{product.price * qtd[p]}}</span>
                                               </div>
                                             </div>
                                          </div>
@@ -77,7 +79,7 @@
                                   <span class="text-positive"> R${{frete.valor}} </span> <br>
                                 </div>
                              </div>
-                             <div class="text-h6">Total: <span class="text-positive">R$ {{total()}}</span></div>
+                             <div class="text-h6">Total: <span class="text-positive">R$ {{total}}</span></div>
                           </q-card>
                           <q-btn class="q-my-md float-left" @click="formaPagamento = !formaPagamento" color="blue-8">Finalizar pedido</q-btn>
                        </div>
@@ -139,7 +141,7 @@
   </q-layout>
 </template>
 <script>
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, computed } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 import axios from 'axios'
@@ -152,19 +154,29 @@ export default defineComponent({
   },
   setup () {
     const leftDrawerOpen = ref(false)
-    const nrItens = ref(1)
-    const img = ref('https://images-na.ssl-images-amazon.com/images/I/71bELfIWTDL.jpg')
-    const item = ref('My Hero Academia Vol. 1')
-    const val = ref([])
     const vendedor = ref('Valentas Mangas Express')
     const dadosEntrega = ref([])
-    const qtd = ref(1)
-    const valor = ref(14.90)
+    const idUser = ref(1)
+    const endUser = ref([])
+    const qtd = ref([])
     const tab = ref('card')
+    const inOrder = ref([]);
     const opFrete = ref(0)
     const itensCarrinho = ref([])
     const qrcodeemv = ref('abcnmaskskdjsakdas123')
     const formaPagamento = ref(false)
+    const total = computed(() => {
+      let valor = 0;
+
+      itensCarrinho.value.forEach((item, i) => {
+        if(inOrder.value[i] == true) {
+          valor =+ item.price * qtd.value[i]
+        }
+      });
+
+        console.log(valor);
+      return valor;
+    });
     const dadosCartao = ref({
       nr_cartao: null,
       nm_pessoa: null,
@@ -172,16 +184,8 @@ export default defineComponent({
       nr_cvv: null
     })
 
-    function total () {
-      const vltotal = ((valor.value * qtd.value) + parseFloat(opFrete.value))
-      return vltotal
-    }
 
     function efetuarPagamento () {
-      axios.defaults.headers.common = {
-        'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
-      }
-
       axios.post('http://127.0.0.1:8000/api/teste', dadosCartao.value).then((response) => {
         console.log(response)
       })
@@ -195,13 +199,27 @@ export default defineComponent({
       document.execCommand('copy')
       document.body.removeChild(storage)
     }
+
     onMounted(() => {
       itensCarrinho.value = JSON.parse(localStorage.getItem('cartProducts'))
+      console.log(itensCarrinho.value);
+
+      itensCarrinho.value.forEach(item => {
+        qtd.value.push(1)
+        inOrder.value.push(true);
+      });
+
+      console.log(inOrder.value);
       axios.post('http://127.0.0.1:8000/frete').then((response) => {
         dadosEntrega.value = response.data;
-        console.log(dadosEntrega.value);
       })
+
+      axios.post('http://127.0.0.1:8000/endereco/'+idUser.value).then((response) => {
+        endUser.value = response.data;
+      })
+
     })
+
     return {
       leftDrawerOpen,
       toggleLeftDrawer () {
@@ -209,21 +227,18 @@ export default defineComponent({
       },
       efetuarPagamento,
       itensCarrinho,
-      nrItens,
-      img,
-      item,
-      val,
       vendedor,
-      qtd,
-      valor,
       tab,
       opFrete,
       total,
+      qtd,
       formaPagamento,
       dadosCartao,
       copyText,
       qrcodeemv,
-      dadosEntrega
+      dadosEntrega,
+      endUser,
+      inOrder
     }
   }
 })

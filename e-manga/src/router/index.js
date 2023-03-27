@@ -1,8 +1,7 @@
 import { route } from 'quasar/wrappers'
 import { createRouter, createMemoryHistory, createWebHistory, createWebHashHistory } from 'vue-router'
 import routes from './routes'
-import jwtDecode from 'jwt-decode';
-
+import jwtDecode from 'jwt-decode'
 /*
  * If not building with SSR mode, you can
  * directly export the Router instantiation;
@@ -36,12 +35,12 @@ export default route(function (/* { store, ssrContext } */) {
             query: { redirect: to.fullPath }
           }
         }
-        
+
         const decodedToken = jwtDecode(token);
-        
+
         const expTimestamp = decodedToken['exp']
         const currentTimestamp = Math.floor(Date.now() / 1000);
-        
+
         if (expTimestamp < currentTimestamp) {
           localStorage.removeItem('jwt')
           return {
