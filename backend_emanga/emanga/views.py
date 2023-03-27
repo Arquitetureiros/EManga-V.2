@@ -1,11 +1,12 @@
 from django.shortcuts import render
+from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from emanga.models import Usuario, Endereco, Pedido
-from emanga.serializers import UsuarioSerializer, EnderecoSerializer, PedidoSerializer
+from emanga.serializers import UsuarioSerializer, EnderecoSerializer, PedidoSerializer, CobrancaSerializer
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 import json
@@ -41,6 +42,7 @@ def return_frete(request):
     return JsonResponse(obj, safe=False, status=200)
 
 @csrf_exempt
+@transaction.atomic()
 def pedidoApi(request, id=0):
     if request.method == 'GET' and id != 0:
         usuario = Pedido.objects.get(id = id)
@@ -50,17 +52,12 @@ def pedidoApi(request, id=0):
         pedidos = Pedido.objects.all()
         pedido_serializer = PedidoSerializer(pedidos, many = True)
         return JsonResponse(pedido_serializer.data, safe=False)
-    elif request.method == 'POST':
-        pedido_data = JSONParser().parse(request)
 
-        return JsonResponse(pedido_data, safe=False)
-        pedido_serializer = PedidoSerializer(data=pedido_data)
+    elif request.method == 'POST':
+        request = JSONParser().parse(request)
+
         
-        
-        if pedido_serializer.is_valid():
-            pedido_serializer.save()
-            return JsonResponse("Added Succesfuly", safe=False)
-        return JsonResponse("Failed to Add", safe=False)
+
     elif request.method == 'PUT':
         pedido_data=JSONParser().parse(request)
         pedido = Pedido.objects.get(id = pedido_data['id'])

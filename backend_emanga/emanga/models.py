@@ -19,24 +19,24 @@ class FormaPagamento(models.Model):
     id = models.AutoField(primary_key=True)
     descricao = models.CharField(max_length=20, default=None, blank=True, null=False)
 
-class Cobranca(models.Model):
-    id = models.AutoField(primary_key=True)
-    forma_pagamento = models.ForeignKey(FormaPagamento, on_delete=models.CASCADE, null=True)
-    dh_criacao = models.DateTimeField(auto_now_add=True)
-    dh_vencimento = models.DateTimeField()
-    vl_total = models.DecimalField(max_digits=10, decimal_places=2, null=False)
-    nr_parcelas = models.CharField(max_length=2, null=False)
-
 class Pedido(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    cobranca = models.ForeignKey(Cobranca, on_delete=models.CASCADE, null=True)
     endereco_entrega = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True)
     dh_pedido = models.DateTimeField(auto_now_add=True)
     vl_total = models.DecimalField(max_digits=10, decimal_places=2, null=False)
 
     class Meta:
         ordering = ['-dh_pedido']
+
+class Cobranca(models.Model):
+    id = models.AutoField(primary_key=True)
+    forma_pagamento = models.ForeignKey(FormaPagamento, on_delete=models.CASCADE, null=True)
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, null=True)
+    dh_criacao = models.DateTimeField(auto_now_add=True)
+    dh_vencimento = models.DateTimeField()
+    vl_total = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    nr_parcelas = models.CharField(max_length=2, null=False)
 
 class Pagamento(models.Model):
     id = models.AutoField(primary_key=True)
