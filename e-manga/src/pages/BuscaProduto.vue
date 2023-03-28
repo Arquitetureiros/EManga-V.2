@@ -10,9 +10,9 @@
           <MarketCart v-if="showCart" :products="getProductsOnCart()"/>
         </div>
         <div>
-              <div class="row justify-center">
-                <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar mangá"/>
-                <q-btn class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
+          <div class="row justify-center">
+               <q-input style="width: 259px;" dense outlined v-model="tituloBuscar" @input="buscarManga" label="Pesquisar mangá"/>
+                <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarManga ()"/>
               </div>
         </div>
 
@@ -94,13 +94,11 @@ import MangaDataService from 'src/services/MangaDataService'
 
 export default defineComponent({
   name: 'MainLayout',
-
   components: {
     EssentialLink,
     MarketCart,
     ToolbarMenu
   },
-
   setup () {
     const leftDrawerOpen = ref(false)
     const nrItens = ref(1)
@@ -110,28 +108,33 @@ export default defineComponent({
     const $q = useQuasar()
     const inCart = ref([])
     const showCart = ref(false)
-
+    function buscarManga () {
+      console.log(this.tituloBuscar)
+      const title = this.tituloBuscar
+      console.log(title)
+      const result = this.$router.go({ path: '/buscar', query: { titulo: title } })
+      this.$router.go(result)
+      // this.$router.replace('/buscar?titulo=' + this.tituloBuscar)
+    }
     function addToCart (product) {
       console.log(this.$route.query.titulo)
       inCart.value.push(product)
       product.inOrder = true
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
     }
-
     function toggleLeftDrawer () {
       leftDrawerOpen.value = !leftDrawerOpen.value
     }
-
     function getProductsOnCart () {
       console.log(JSON.parse(localStorage.getItem('cartProducts')))
       return JSON.parse(localStorage.getItem('cartProducts'))
     }
-
     return {
       MarketCart,
       nrItens,
       busca,
       expanded,
+      buscarManga,
       $q,
       addToCart,
       products,
@@ -145,7 +148,8 @@ export default defineComponent({
   data () {
     return {
       mangas: [],
-      tituloBusca: this.$route.query.titulo
+      tituloBusca: this.$route.query.titulo,
+      reloaded: false
     }
   },
   methods: {
@@ -154,15 +158,19 @@ export default defineComponent({
         const mangasFiltrados = response.data.filter((mangas) => {
           return mangas.ds_titulo.toLowerCase().includes(this.tituloBusca.toLowerCase())
         })
-        this.products = mangasFiltrados
-        console.log(this.products)
+        if (mangasFiltrados.length > 0) {
+          this.products = mangasFiltrados
+          console.log(this.products)
+        } else {
+          this.$router.push('/')
+        }
       })
     },
     acessarAnuncio (id) {
       this.$router.push(`/verManga/${id}`)
     }
   },
-  mounted () {
+  created () {
     this.listarFiltros()
   }
 })

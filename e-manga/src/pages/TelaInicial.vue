@@ -11,8 +11,8 @@
         </div>
         <div>
               <div class="row justify-center">
-               <q-input style="width: 259px;" dense outlined v-model="tituloBuscar" @input="buscarManga" label="Pesquisar mangá"/>
-                <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarManga ()"/>
+               <q-input style="width: 259px;" dense outlined v-model="tituloBuscarInicial" @input="buscarManga" label="Pesquisar mangá"/>
+                <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarMangaInicial ()"/>
               </div>
         </div>
 
@@ -90,23 +90,19 @@
   </q-layout>
 </template>
 <script>
-
 import { useQuasar } from 'quasar'
 import { defineComponent, ref } from 'vue'
 import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 import MangaDataService from 'src/services/MangaDataService'
-
 export default defineComponent({
   name: 'MainLayout',
-
   components: {
     EssentialLink,
     MarketCart,
     ToolbarMenu
   },
-
   setup () {
     const leftDrawerOpen = ref(false)
     const nrItens = ref(1)
@@ -116,31 +112,27 @@ export default defineComponent({
     const products = ref()
     const inCart = ref([])
     const showCart = ref(false)
-
-    function buscarManga () {
-      this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscar } })
+    function buscarMangaInicial () {
+      this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscarInicial } })
+      // this.$router.replace('/buscar?titulo=' + this.tituloBuscar)
     }
-
     function addToCart (product) {
       inCart.value.push(product)
       localStorage.setItem('cartProducts', JSON.stringify(inCart.value))
     }
-
     function toggleLeftDrawer () {
       leftDrawerOpen.value = !leftDrawerOpen.value
     }
-
     function getProductsOnCart () {
       console.log(JSON.parse(localStorage.getItem('cartProducts')))
       return JSON.parse(localStorage.getItem('cartProducts'))
     }
-
     return {
       MarketCart,
       nrItens,
       busca,
       expanded,
-      buscarManga,
+      buscarMangaInicial,
       $q,
       addToCart,
       products,
@@ -159,8 +151,8 @@ export default defineComponent({
   },
   methods: {
     listar () {
-      MangaDataService.listarPorDesc(1, true, 12).then((response) => {
-        this.products = response.data
+      MangaDataService.listar().then((response) => {
+        this.products = response.data.slice(0, 6)
         console.log(this.products)
       })
     },
