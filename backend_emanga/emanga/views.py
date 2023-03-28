@@ -55,9 +55,28 @@ def pedidoApi(request, id=0):
 
     elif request.method == 'POST':
         request = JSONParser().parse(request)
+        item_pedido = []
 
+        pedido = { 
+            'user': request['pedido']['user_id'],
+            'endereco_entrega': request['pedido']['endereco_entrega_id'],
+            'vl_total': request['pedido']['vl_total']
+        }
+
+        pedido_serializer = PedidoSerializer(data=pedido)
+
+        if pedido_serializer.is_valid()
+            for item in request['pedido']['item_pedido']:
+                item_pedido.append(item)
         
+            cobranca = {
+                'forma_pagamento': request['pedido']['forma_pagamento_id'],
+                'pedido' : 1
+            }
 
+            cobranca_serializer = CobrancaSerializer(data=cobranca)
+
+        return JsonResponse(request, safe=False)
     elif request.method == 'PUT':
         pedido_data=JSONParser().parse(request)
         pedido = Pedido.objects.get(id = pedido_data['id'])
