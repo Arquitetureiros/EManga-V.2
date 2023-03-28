@@ -6,54 +6,35 @@
 
     <q-page-container>
       <h4 style="text-align: center;">Meus pedidos</h4>
-      <q-card class="my-card">
-        <q-card-section>
-          <div class="row justify-between items-stretch">
-            <div class="row items-center" style="width: 80%;">
-              <div style="width: 20%;" class="flex justify-center">
-                <img src="hunterxhunter.jpg" style="height: 140px;">
-              </div>
-              <div style="width: 60%; height: 100%;" class="flex column">
-                <div style="height: 50%;" class="flex justify-start">
-                  <h6>Hunter x Hunter vol. 1</h6>
-                </div>
-                <div style="width: 50%; height: 50%;" class="flex row justify-start items-center">
-                  <span style="width: 100%;">Vendido por Yuripa Mangás</span>
-                  <span style="width: 100%;">Produto entregue em 09/10/2022</span>
-                </div>
-              </div>
-            </div>
-            <div style="width: 20%;" class="flex justify-center items-center">
-              <span class="text-h6" style="height: 40%;">Avaliar Vendedor</span>
-              <q-rating size="2rem" v-model="ratingModel" :max="5" color="yellow" style="height:60%;"/>
-            </div>
-          </div>
+      <q-card class="my-card" v-for="pedido in this.pedidos">
+        <q-card-section class="row" style="width: 100%">
+          <span style="width: 20%; text-align: center;">{{pedido.id}}</span>
+          <span v-if="pedido.entregue" style="width: 60%; text-align: center;">Produto entregue em <br> {{pedido.dh_pedido}}</span>
+          <span v-if="!pedido.entregue" style="width: 60%; text-align: center;">Produto em Transito</span>
+          <q-btn flat @click="ToggleItensPedido(pedido.id)" style="width: 20%">Itens</q-btn>
         </q-card-section>
       </q-card>
-      <q-card class="my-card">
+
+      <q-dialog v-model="itensPedido">
+      <q-card style="width: 30%;">
         <q-card-section>
-          <div class="row justify-between items-stretch">
-            <div class="row items-center" style="width: 80%;">
-              <div style="width: 20%;" class="flex justify-center">
-                <img src="jujutsu-kaisen.jpg" style="height: 140px;">
-              </div>
-              <div style="width: 60%; height: 100%;" class="flex column">
-                <div style="height: 50%;" class="flex justify-start">
-                  <h6>Jujutsu Kaisen vol. 1</h6>
-                </div>
-                <div style="width: 50%; height: 50%;" class="flex row justify-start items-center">
-                  <span style="width: 100%;">Vendido por Yuripa Mangás</span>
-                  <span style="width: 100%;">Produto em trânsito</span>
-                </div>
-              </div>
-            </div>
-            <div style="width: 20%;" class="flex justify-center items-center">
-              <span class="text-h6" style="height: 40%;">Avaliar Vendedor</span>
-              <span style="text-align: center; height: 60%;">Avaliação disponível após a entrega ser efetuada</span>
-            </div>
-          </div>
+          <div class="text-h6">Itens do Pedido: </div>
         </q-card-section>
+
+        <q-card-section class="q-pt-none row" v-for="item in this.itens" style="width: 100%;">
+          <img :src="item.fotoCaminho" style="width: 50%;">
+          <q-card class="column" style="width: 50%; justify-content: center; align-items: end;">
+            <div style="margin: 20px;">Vendido por: <br>{{ item.usuario }}</div>
+            <div style="margin: 20px;">Quantidade: {{ item.qt_pedido }}</div>
+            <div style="margin: 20px;">Valor Total: {{ item.vl_total }}</div>
+          </q-card>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn style="width: 100%; padding: 0;" label="Fechar" color="red" v-close-popup @click="SalvarCartao"/>
+        </q-card-actions>
       </q-card>
+    </q-dialog>
     </q-page-container>
 
     <q-drawer
@@ -81,6 +62,13 @@ import { defineComponent, ref } from 'vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 
+import PedidoDataService from 'src/services/PedidoDataService'
+import ItemPedidoDataService from 'src/services/ItemPedidoDataService'
+import MangaDataService from 'src/services/MangaDataService'
+
+import jwtDecode from 'jwt-decode';
+import UsuarioDataService from 'src/services/UsuarioDataService'
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -97,6 +85,70 @@ export default defineComponent({
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
     }
+  },
+  data ()
+  {
+    return {
+      pedidos: [],
+      itensPedido: false,
+      itens: []
+    }
+  },
+  methods: {
+    ListarPedidos()
+    {
+      const token = localStorage.getItem('jwt');
+      if(!token) { return; }
+
+      const decodedToken = jwtDecode(token);
+
+      PedidoDataService.listarPorUsuario(decodedToken['user_id'])
+        .then((response) => {
+          this.pedidos = response.data
+        })
+    },
+    ListarItensPedido(id)
+    {
+      ItemPedidoDataService.listar()
+      .then((response) => {
+          console.log(response.data)
+        })
+    },
+    ListarManga(id)
+    {
+      MangaDataService.listar()
+      .then((response) => {
+          console.log(response.data)
+        })
+    },
+    ToggleItensPedido(id)
+    {
+      ItemPedidoDataService.listarPorPedido(id)
+        .then((response) => {
+          this.itens = response.data;
+          
+          for(let item of this.itens)
+          {
+            console.log(item)
+            MangaDataService.obter(item.manga)
+              .then((response) => {
+                item.fotoCaminho = response.data.fotoCaminho;
+                UsuarioDataService.obter(response.data.user_id)
+                  .then((response) => {
+                      item.usuario = response.data.nome;
+                  })
+              })
+          }
+        })
+
+      this.itensPedido = !this.itensPedido
+    }
+  },
+  mounted()
+  {
+    this.ListarPedidos()
+    this.ListarItensPedido()
+    this.ListarManga()
   }
 })
 </script>

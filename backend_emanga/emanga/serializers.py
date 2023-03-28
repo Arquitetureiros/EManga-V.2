@@ -1,7 +1,22 @@
 from rest_framework import serializers
-from emanga.models import Usuario, Endereco, Cartao
+from emanga.models import Usuario, Endereco, Cartao, Manga, Pedido, ItemPedido
 
 from rest_framework_simplejwt.tokens import RefreshToken
+
+class ItemPedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= ItemPedido
+        fields = '__all__'
+
+class PedidoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Pedido
+        fields = '__all__'
+
+class MangaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Manga
+        fields = '__all__'
 
 class CartaoSerializer(serializers.ModelSerializer):
     class Meta:
