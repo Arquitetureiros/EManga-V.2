@@ -119,11 +119,10 @@
                                    <q-input outlined v-model="dadosCartao.nm_pessoa" dense color="primary" label="Nome no cartao" />
                                 </div>
                              </div>
-                             <q-btn class="q-my-md float-left" @click="efetuarPagamento" color="green-8">Efetuar pagamento</q-btn>
                           </div>
                           <div v-if="tab == 'boleto'">
-                             <div class="text-h6">                    Boleto                  </div>
                           </div>
+                          <q-btn class="q-my-md float-left" @click="salvarPagamento" color="green-8">Efetuar pagamento</q-btn>
                        </div>
                     </div>
                  </div>
@@ -145,6 +144,7 @@ import { defineComponent, ref, onMounted, computed } from 'vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
 import axios from 'axios'
+import { useQuasar } from 'quasar'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -153,6 +153,7 @@ export default defineComponent({
     ToolbarMenu
   },
   setup () {
+    const $q = useQuasar()
     const leftDrawerOpen = ref(false)
     const vendedor = ref('Valentas Mangas Express')
     const dadosEntrega = ref([])
@@ -165,6 +166,8 @@ export default defineComponent({
     const itensCarrinho = ref([])
     const qrcodeemv = ref('abcnmaskskdjsakdas123')
     const formaPagamento = ref(false)
+    const itensPedido = ref([])
+
     const total = computed(() => {
       let valor = 0;
 
@@ -174,22 +177,17 @@ export default defineComponent({
         }
       });
 
-        console.log(valor);
+      valor += opFrete.value;
       return valor;
+
     });
+    
     const dadosCartao = ref({
       nr_cartao: null,
       nm_pessoa: null,
       dt_validade: null,
       nr_cvv: null
     })
-
-
-    function efetuarPagamento () {
-      axios.post('http://127.0.0.1:8000/api/teste', dadosCartao.value).then((response) => {
-        console.log(response)
-      })
-    }
 
     function copyText () {
       const storage = document.createElement('textarea')
@@ -200,10 +198,68 @@ export default defineComponent({
       document.body.removeChild(storage)
     }
 
+    function salvarPedido(pagamento) {
+      const obj = {
+        pagamento: pagamento,
+        pedido: {
+          user_id: 1,
+          endereco_entrega_id: 1,
+          vl_total: total.value,
+          item_pedido: [
+              {
+                  manga_id: 1,
+                  qt_pedido: 2,
+                  vl_unitario: 13.00,
+                  vl_total: 20.00
+              }
+          ]
+        }
+      }
+      console.log(obj);
+    }
+
+    function salvarPagamento () {
+
+      const dataAtual = new Date();
+      const dia = ("0" + dataAtual.getDate()).slice(-2);
+      const mes = ("0" + (dataAtual.getMonth() + 1)).slice(-2);
+      const ano = dataAtual.getFullYear();
+      const dataFormatada = `${dia}/${mes}/${ano}`;
+      let pagamento = {}
+
+      switch (tab.value) {
+        case 'card':
+          pagamento = {
+            forma_pagamento_id: 1,
+            nr_parcelas: 1,
+            valor_parcela: total.value,
+            vl_pago: total.value,
+            dh_vencimento: dataFormatada
+          }
+          break;
+
+        case 'boleto':
+          $q.notify({
+            color: 'positive',
+            message: 'Boleto enviado no email de cadastro',
+            caption: 'Confirmação após pagamento'
+          })
+          break;
+
+        case 'pix':
+          $q.notify({
+            color: 'positive',
+            message: 'O pedido será concluído após confirmação de pagamento'
+          })
+        default:
+          break;
+      }
+
+      salvarPedido(pagamento)
+    }
+
     onMounted(() => {
       itensCarrinho.value = JSON.parse(localStorage.getItem('cartProducts'))
-      console.log(itensCarrinho.value);
-
       itensCarrinho.value.forEach(item => {
         qtd.value.push(1)
         inOrder.value.push(true);
@@ -225,7 +281,7 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      efetuarPagamento,
+      salvarPagamento,
       itensCarrinho,
       vendedor,
       tab,
@@ -238,7 +294,8 @@ export default defineComponent({
       qrcodeemv,
       dadosEntrega,
       endUser,
-      inOrder
+      inOrder,
+      itensPedido
     }
   }
 })
