@@ -58,7 +58,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             else:
                 return attrs
         else:
-            raise serializers.ValidationError('Email e senha são obrigatórios.')
+            return 'Email e senha são obrigatórios.'
     
     def authenticate(self, request='Post', email=None, senha=None, **kwargs):
         try:

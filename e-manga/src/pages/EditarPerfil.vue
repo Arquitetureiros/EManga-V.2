@@ -17,25 +17,26 @@
       </div>
 
       <form action="" class="q-gutter-lg">
-        <q-input ref="" outlined v-model="usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        <q-input outlined v-model="usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;" readonly/>
 
-        <q-input ref="" outlined v-model="usuario.email" label="Email" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-
-        <div class="row" style="flex-wrap: nowrap; width: 100%;">
-          <q-input style="width: 70%;" ref="" outlined v-model="endereco.cep" label="Cep" :dense="dense" lazy-rules :rules="nameRules" />
-
-          <q-input style="width: 30%;" ref="" outlined v-model="endereco.num" label="Num" :dense="dense" lazy-rules :rules="nameRules"/>
-        </div>
-
-        <q-input ref="" outlined v-model="endereco.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        <q-input outlined v-model="usuario.email" label="Email" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;" readonly/>
 
         <div class="row" style="flex-wrap: nowrap; width: 100%;">
-          <q-input style="width: 70%;" ref="" outlined v-model="endereco.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 70%;" ref="" outlined v-model="endereco.cep" label="Cep" :dense="dense" lazy-rules :rules="nameRules" readonly/>
 
-          <q-input style="width: 30%;" ref="" outlined v-model="endereco.uf" label="UF" :dense="dense" lazy-rules :rules="nameRules" />
+          <q-input style="width: 30%;" ref="" outlined v-model="endereco.num" label="Num" :dense="dense" lazy-rules :rules="nameRules" readonly/>
         </div>
-        <div class="row content-center" style="width: 100%;">
-          <q-btn style="width: 100%; padding: 0;" label="Editar Endereço" color="positive" @click="AtualizarEndereco"/>
+
+        <q-input ref="" outlined v-model="endereco.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;" readonly/>
+
+        <div class="row" style="flex-wrap: nowrap; width: 100%;">
+          <q-input style="width: 70%;" ref="" outlined v-model="endereco.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" readonly/>
+
+          <q-input style="width: 30%;" ref="" outlined v-model="endereco.uf" label="UF" :dense="dense" lazy-rules :rules="nameRules" readonly/>
+        </div>
+        <div class="row" style="width: 100%; justify-content: space-between;">
+          <q-btn style="width: 40%; padding: 0;" label="Editar Perfil" color="positive" @click="ToggleUpdateInfo"/>
+          <q-btn style="width: 40%; padding: 0;" label="Editar Endereço" color="positive" @click="ToggleUpdateEndereco"/>
           <!--<q-icon name="font_download" size="25px" color="green"/>
           Novo Endereço-->
         </div>
@@ -62,9 +63,51 @@
           </q-card-actions>
         </q-card>
 
-        <q-btn style="width: 100%; padding: 0;" label="Salvar Perfil" color="positive" @click="SalvarPerfil"/>
+        <!--<q-btn style="width: 100%; padding: 0;" label="Salvar Perfil" color="positive" @click="SalvarPerfil"/>-->
+
       </form>
     </div>
+
+    <q-dialog v-model="updateInfo">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Atualizar Informações</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input outlined v-model="aux_usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="aux_usuario.email" label="Email" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="aux_usuario.senha" label="Nova Senha" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="conf_senha" label="Senha" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn style="width: 100%; padding: 0;" label="Salvar Informações" color="positive" v-close-popup @click="SalvarPerfil"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="updateEndereco">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Atualizar Endereco</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div class="row" style="width: 100%">
+            <q-input outlined v-model="aux_endereco.cep" label="CEP" :dense="dense" lazy-rules :rules="nameRules" style="width: 70%;"/>
+            <q-input outlined v-model="aux_endereco.num" label="Numero" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
+          </div>
+          <q-input outlined v-model="aux_endereco.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="aux_endereco.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="aux_endereco.uf" label="UF" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn style="width: 100%; padding: 0;" label="Salvar Endereco" color="positive" v-close-popup @click="AtualizarEndereco"/>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
     <q-dialog v-model="addCartao">
       <q-card>
@@ -164,7 +207,25 @@ export default defineComponent({
         email: '',
         senha: ''
       },
+      aux_usuario: {
+        id: '',
+        nome: '',
+        email: '',
+        senha: ''
+      },
+      conf_senha: '',
+      updateInfo: false,
       endereco: {
+        id: '',
+        user_id: '',
+        cep: '',
+        num: '',
+        logradouro: '',
+        cidade: '',
+        uf: ''
+      },
+      updateEndereco: false,
+      aux_endereco: {
         id: '',
         user_id: '',
         cep: '',
@@ -218,7 +279,9 @@ export default defineComponent({
     },
     AtualizarEndereco()
     {
-      const data = this.endereco;
+      this.aux_endereco.id = this.endereco.id;
+      this.aux_endereco.user_id = this.endereco.user_id;
+      const data = this.aux_endereco;
 
       EnderecoDataService.atualizar(data)
         .then((response) => {
@@ -227,12 +290,27 @@ export default defineComponent({
     },
     SalvarPerfil()
     {
-      const data = this.usuario
+      /*if(!this.usuario.senha != this.conf_senha)
+        return;*/
+      
+      this.aux_usuario.id = this.usuario.id;
+      const data = this.aux_usuario
 
       UsuarioDataService.atualizar(data)
         .then((response) => {
-          this.AtualizarEndereco()
+
         })
+    },
+    ToggleUpdateInfo()
+    {
+      this.aux_usuario = this.usuario;
+      this.aux_usuario.senha = '';
+      this.updateInfo = !this.updateInfo;
+    },
+    ToggleUpdateEndereco()
+    {
+      this.aux_endereco = this.endereco;
+      this.updateEndereco = !this.updateEndereco;
     },
     ToggleAddCartao()
     {

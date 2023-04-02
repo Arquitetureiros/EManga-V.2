@@ -18,12 +18,10 @@
             <q-input ref="passwRef" v-model="usuario.senha" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
             <div>
               <q-btn label="Entrar" @click="Logar" color="positive" style="width:100%"/>
-
             </div>
-            <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
-            <div>
-              <q-btn font-awesome-icon icon="fa-brands fa-google" label="Entrar com sua conta Google" type="submit"  style="color: black; background-color: #F5F5F5; width:100%;"/>
-
+            <div style="text-align: center;">
+              <span>Não é cadastrado?</span>
+              <q-btn label="Cadastrar-se" to="/cadastro" color="positive" style="width:100%"/>
             </div>
           </form>
         </div>

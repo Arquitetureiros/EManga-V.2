@@ -22,12 +22,11 @@
 
             <div>
               <q-btn label="Cadastrar" @click="CadastrarUsuario" color="positive" style="width:100%"/>
-
             </div>
-            <q class="ribbon" style="display: block; margin-top:15px;">OU</q>
-            <div>
-              <q-btn font-awesome-icon icon="fa-brands fa-google" label="Entrar com sua conta Google" type="submit"  style="color: black; background-color: #F5F5F5; width:100%;"/>
 
+            <div style="text-align: center;">
+              <span>Já é cadastrado?</span>
+              <q-btn label="Entrar" to="/login" color="positive" style="width:100%"/>
             </div>
           </form>
         </div>
