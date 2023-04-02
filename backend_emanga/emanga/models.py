@@ -34,13 +34,14 @@ class Cobranca(models.Model):
     forma_pagamento = models.ForeignKey(FormaPagamento, on_delete=models.CASCADE, null=True)
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, null=True)
     dh_criacao = models.DateTimeField(auto_now_add=True)
+    dh_vencimento = models.DateTimeField(auto_now_add=False)
     vl_total = models.DecimalField(max_digits=10, decimal_places=2, null=False)
     nr_parcelas = models.CharField(max_length=2, null=False)
 
 class Pagamento(models.Model):
     id = models.AutoField(primary_key=True)
     cobranca = models.ForeignKey(Cobranca, on_delete=models.CASCADE)
-    nr_parcela = models.IntegerField(max_digits=2, null=False)
+    nr_parcela = models.IntegerField(null=False)
     dh_pagamento = models.DateTimeField(null=True)
     vl_fatura =  models.DecimalField(max_digits=10, decimal_places=2, null=False)
     vl_pago = models.DecimalField(max_digits=10, decimal_places=2, null=True)

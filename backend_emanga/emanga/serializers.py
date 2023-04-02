@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from emanga.models import Usuario, Endereco, Pedido, Cobranca
+from emanga.models import Usuario, Endereco, Pedido, Cobranca, ItemPedido, Pagamento
 
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -73,11 +73,11 @@ class CobrancaSerializer(serializers.ModelSerializer):
 
 class ItemPedidoSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Cobranca
+        model=ItemPedido
         fields = '__all__'
 
 class PagamentoSerializer(serializers.ModelSerializer):
     class Meta:
-        model=Cobranca
+        model=Pagamento
         fields = '__all__'
 
