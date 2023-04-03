@@ -14,7 +14,7 @@ class MangaDataService {
   }
 
   atualizar (id, manga) {
-    return http.put(`/manga?id=${id}`, id, manga)
+    return http.put(`/manga/${id}`, manga)
   }
 
   async deletar (id) {

@@ -9,12 +9,6 @@
         <div class="float-right">
           <MarketCart v-if="showCart" :products="getProductsOnCart()"/>
         </div>
-        <div>
-              <div class="row justify-center">
-                <q-input style="width: 259px;" dense outlined v-model="text" label="Pesquisar seu anúncio"/>
-                <q-btn class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" />
-              </div>
-        </div>
 
           <div class="row justify-start">
 

@@ -20,102 +20,47 @@
                       className="absolute-center"
               ></q-img>
             </div>
-            <div style="display: flex; margin-top: 10px; justify-content: space-between;">
-              <div style="max-width: 80px; max-height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image2"
+            <q-file v-model="imagem"
                       label="+"
                       filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      >
-              </q-file>
-              <q-img
-                      v-if="imageUrl2"
-                      :src="imageUrl2"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
+                      style="width: 100%; height: 100%"
+                      @update:model-value="handleUploadImage()"
                       accept=".jpg, image/*"
-              ></q-img>
-              </div>
-              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image3"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      >
-              </q-file>
-              <q-img
-                      v-if="imageUrl3"
-                      :src="imageUrl3"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-                      accept=".jpg, image/*"
-              ></q-img>
-              </div>
-              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image4"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      >
-              </q-file>
-              <q-img
-                      v-if="imageUrl4"
-                      :src="imageUrl4"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-                      accept=".jpg, image/*"
-              ></q-img>
-              </div>
-              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image5"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      >
-              </q-file>
-              <q-img
-                      v-if="imageUrl5"
-                      :src="imageUrl5"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-              ></q-img>
-              </div>
-            </div>
+              ></q-file>
           </div>
           <div class="">
             <div class="q-pa-md" style="max-width: 300px">
               Atualizar titulo do anúncio:
-              <q-input outlined v-model="mangaAtt.ds_titulo" label="Titulo" />
+              <q-input outlined v-model="mangaAtt.ds_titulo" :rules="regrasCampoTexto" label="Titulo" />
             </div>
             <div class="q-pa-md" style="max-width: 300px">
               Atualizar descrição do anúncio: <br>
-              <q-input v-model="mangaAtt.ds_sinopse" outlined type="textarea" />
+              <q-input v-model="mangaAtt.ds_sinopse" :rules="regrasCampoTexto" outlined type="textarea" />
             </div>
             <div class="q-pa-md row" style="max-width: 400px">
               <div class="q-pr-md" style="max-width: 150px">
                 Cidade
-                <q-input outlined v-model="mangaAtt.cidade" label="Cidade" />
+                <q-input outlined v-model="mangaAtt.cidade" :rules="regrasCampoTexto" label="Cidade" />
               </div>
               <div class="q-pr-md" style="max-width: 150px">
                 Estado abrevidado:
-                <q-input outlined v-model="mangaAtt.estado" label="Estado" />
+                <q-input outlined v-model="mangaAtt.estado" :rules="regrasEstado" label="Estado" />
               </div>
             </div>
             <div class="q-pa-md row" style="max-width: 300px">
               <div class="q-pr-md" style="max-width: 300px">
                 Quantidade:
-                <q-input v-model.number="mangaAtt.quantidade" type="number" style="max-width: 100px" dense outlined />
+                <q-input v-model.number="mangaAtt.quantidade" type="number" :rules="[validarValor]" style="max-width: 100px" dense outlined />
               </div>
               <div class="q-pr-md" style="max-width: 300px">
                 Preço:
-                <q-input outlined v-model="mangaAtt.valor" type="number" prefix="R$" dense style="max-width: 100px" />
+                <q-input outlined v-model="mangaAtt.valor" type="number" :rules="[validarValor]" prefix="R$" dense style="max-width: 100px" />
               </div>
               <div class="q-pa-md">
                 <q-btn color="primary" to="/meusProdutos" label="Atualizar anúncio" @click="AtualizarManga" />
+              </div>
+              <div class="q-pa-md">
+                <q-btn color="primary" to="/meusProdutos" label="Desativar anúncio" @click="DesativarManga" />
               </div>
             </div>
           </div>
@@ -165,10 +110,6 @@ export default defineComponent({
     const desc = ref()
     const quant = ref(1)
     const imagem = ref()
-    const imagem1 = ref()
-    const imagem2 = ref()
-    const imagem3 = ref()
-    const imagem4 = ref()
     const product = ref()
     const manga = ref()
 
@@ -182,12 +123,15 @@ export default defineComponent({
       desc,
       quant,
       imagem,
-      imagem1,
-      imagem2,
-      imagem3,
-      imagem4,
       product,
-      manga
+      manga,
+      regrasCampoTexto: [
+        val => (val && val.length > 0) || 'O campo não pode ser vazio'
+      ],
+      regrasEstado: [
+        val => (val && val.length > 0) || 'O campo não pode ser vazio',
+        val => (val.length <= 2) || 'O estado tem que ser abreviado'
+      ]
     }
   },
   data () {
@@ -197,16 +141,15 @@ export default defineComponent({
   },
   methods: {
     obterPorId () {
-      const id = this.$route.params.id // Obter o ID da rota
-      Number(id)
-      MangaDataService.obterPorId(id).then((response) => {
+      const idSite = this.$route.params.id // Obter o ID da rota
+      MangaDataService.obterPorId(idSite).then((response) => {
         this.product = response.data
         console.log(this.product)
         this.manga = this.product[0]
         console.log(this.manga)
 
         this.mangaAtt = {
-          id: this.manga.id,
+          id: idSite,
           ds_titulo: this.manga.ds_titulo,
           ds_sinopse: this.manga.ds_sinopse,
           cidade: this.manga.cidade,
@@ -218,11 +161,43 @@ export default defineComponent({
       })
     },
     AtualizarManga () {
-      console.log(this.mangaAtt)
-      MangaDataService.atualizar(this.mangaAtt)
+      if (this.mangaAtt.quantidade > 0 && this.mangaAtt.valor > 0 && this.mangaAtt.ds_titulo.length > 0) {
+        MangaDataService.atualizar(this.mangaAtt.id, this.mangaAtt)
+          .then(() => {
+            alert('manga atualizado')
+          })
+      } else {
+        alert('A quantidade e o preço do manga devem ser maior que 0 e ele precisa possuir um titulo')
+      }
+    },
+    DesativarManga () {
+      const idSite = this.$route.params.id // Obter o ID da rota
+
+      this.mangaDest = {
+        id: idSite,
+        ds_titulo: this.manga.ds_titulo,
+        ds_sinopse: this.manga.ds_sinopse,
+        cidade: this.manga.cidade,
+        estado: this.manga.estado,
+        valor: this.manga.valor,
+        fotoCaminho: this.manga.fotoCaminho.name,
+        quantidade: 0
+      }
+      MangaDataService.atualizar(this.mangaDest.id, this.mangaDest)
         .then(() => {
-          alert('manga atualizado')
+          alert('manga desativado')
         })
+    },
+    handleUploadImage () {
+      if (this.imagem) {
+        this.mangaAtt.fotoCaminho = URL.createObjectURL(this.imagem)
+      }
+    },
+    validarValor (valor) {
+      if (valor < 1) {
+        return 'não pode ser negativo ou zero.'
+      }
+      return true
     }
   },
   mounted () {

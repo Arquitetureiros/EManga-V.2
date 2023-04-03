@@ -27,72 +27,6 @@
                       className="absolute-center"
               ></q-img>
             </div>
-            <div style="display: flex; margin-top: 10px; justify-content: space-between;">
-              <div style="max-width: 80px; max-height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image2"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      @update:model-value="handleUploadImage2()">
-              </q-file>
-              <q-img
-                      v-if="imageUrl2"
-                      :src="imageUrl2"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-                      accept=".jpg, image/*"
-              ></q-img>
-              </div>
-              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image3"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      @update:model-value="handleUploadImage3()">
-              </q-file>
-              <q-img
-                      v-if="imageUrl3"
-                      :src="imageUrl3"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-                      accept=".jpg, image/*"
-              ></q-img>
-              </div>
-              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image4"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      @update:model-value="handleUploadImage4()">
-              </q-file>
-              <q-img
-                      v-if="imageUrl4"
-                      :src="imageUrl4"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-                      accept=".jpg, image/*"
-              ></q-img>
-              </div>
-              <div style="width: 80px; height: 80px" className="q-pt-lg relative-position">
-              <q-file v-model="image5"
-                      label="+"
-                      filled
-                      style="background-color: #eee; width: 100%; height: 100%"
-                      @update:model-value="handleUploadImage5()"
-                      accept=".jpg, image/*">
-              </q-file>
-              <q-img
-                      v-if="imageUrl5"
-                      :src="imageUrl5"
-                      spinner-color="white"
-                      style="height: 100%; width: 100%"
-                      className="absolute-center"
-              ></q-img>
-              </div>
-            </div>
           </div>
           <div class="">
             <div class="q-pa-md" style="max-width: 300px">
@@ -242,11 +176,14 @@ export default defineComponent({
         fotoCaminho: this.image.name,
         quantidade: this.manga.quantidade
       }
-
-      MangaDataService.cadastrar(data)
-        .then(() => {
-          alert('manga adicionado')
-        })
+      if (data.quantidade > 0 && data.valor > 0 && data.ds_titulo.length > 0) {
+        MangaDataService.cadastrar(data)
+          .then(() => {
+            alert('manga adicionado')
+          })
+      } else {
+        alert('A quantidade e o preço do manga devem ser maior que 0 e ele precisa possuir um titulo')
+      }
     },
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
@@ -257,8 +194,8 @@ export default defineComponent({
       }
     },
     validarValor (valor) {
-      if (valor < 0) {
-        return 'O valor não pode ser negativo.'
+      if (valor < 1) {
+        return 'não pode ser negativo ou zero.'
       }
       return true
     }
