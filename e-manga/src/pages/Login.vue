@@ -146,11 +146,19 @@ export default defineComponent({
 
       UsuarioDataService.logar(data)
         .then((response) => {
-          localStorage.setItem('jwt', JSON.stringify(response.data))
-          if (this.$route.query.redirect) {
-            this.$router.push(this.$route.query.redirect)
-          } else {
-            this.$router.push('/')
+          console.log(response.data)
+          if(response.data['access'])
+          {
+            localStorage.setItem('jwt', JSON.stringify(response.data))
+            if (this.$route.query.redirect) {
+              this.$router.push(this.$route.query.redirect)
+            } else {
+              this.$router.push('/')
+            }
+          }
+          else
+          {
+            alert("Credenciais erradas")
           }
         })
     }
