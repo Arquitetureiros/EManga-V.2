@@ -11,8 +11,8 @@
         </div>
         <div>
           <div class="row justify-center">
-               <q-input style="width: 259px;" dense outlined v-model="tituloBuscar" @input="buscarManga" label="Pesquisar mangá"/>
-                <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarManga ()"/>
+               <q-input style="width: 259px;" dense outlined v-model="tituloBuscar" @input="buscarManga" label="Pesquisar por título do mangá"/>
+                <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarOutroManga ()"/>
               </div>
         </div>
 
@@ -90,7 +90,7 @@ import { defineComponent, ref } from 'vue'
 import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
-import MangaDataService from 'src/services/MangaDataService'
+import MangaDataService from 'src/services/mangaDataService'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -109,12 +109,13 @@ export default defineComponent({
     const inCart = ref([])
     const showCart = ref(false)
     function buscarManga () {
-      console.log(this.tituloBuscar)
-      const title = this.tituloBuscar
-      console.log(title)
-      const result = this.$router.go({ path: '/buscar', query: { titulo: title } })
-      this.$router.go(result)
-      // this.$router.replace('/buscar?titulo=' + this.tituloBuscar)
+      // this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscar } })
+      this.$router.replace('/buscar?titulo=' + this.tituloBuscar)
+    }
+    function buscarOutroManga () {
+      // this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscar } })
+      this.$router.replace('/buscar?titulo=' + this.tituloBuscar)
+      this.listarFiltros()
     }
     function addToCart (product) {
       console.log(this.$route.query.titulo)
@@ -135,6 +136,7 @@ export default defineComponent({
       busca,
       expanded,
       buscarManga,
+      buscarOutroManga,
       $q,
       addToCart,
       products,
@@ -148,8 +150,12 @@ export default defineComponent({
   data () {
     return {
       mangas: [],
-      tituloBusca: this.$route.query.titulo,
-      reloaded: false
+      tituloBusca: this.$route.query.titulo
+    }
+  },
+  watch: {
+    tituloBuscar (newVal, oldVal) {
+      this.buscarManga()
     }
   },
   methods: {
@@ -163,6 +169,7 @@ export default defineComponent({
           console.log(this.products)
         } else {
           this.$router.push('/')
+          alert('Não foi encontrado nenhum mangá com esse título')
         }
       })
     },
@@ -172,6 +179,9 @@ export default defineComponent({
   },
   created () {
     this.listarFiltros()
+  },
+  updated () {
+    this.buscarOutroManga()
   }
 })
 </script>

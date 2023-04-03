@@ -39,7 +39,7 @@ const routes = [
     component: () => import('pages/BuscaProduto.vue')
   },
   {
-    path: '/verManga',
+    path: '/verManga/:id',
     component: () => import('pages/verManga.vue')
   },
   {

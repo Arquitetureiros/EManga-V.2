@@ -95,7 +95,7 @@ import { defineComponent, ref } from 'vue'
 import MarketCart from 'components/MarketCart.vue'
 import EssentialLink from 'components/EssentialLink.vue'
 import ToolbarMenu from 'components/ToolbarMenu.vue'
-import MangaDataService from 'src/services/MangaDataService'
+import MangaDataService from 'src/services/mangaDataService'
 export default defineComponent({
   name: 'MainLayout',
   components: {

@@ -1,6 +1,6 @@
 <template>
   <q-item
-  v-for="(link,l) in linksList" :key="l"
+  v-for="(link,l) in linksList"
     clickable
     tag="a"
     :href="link.link"
@@ -15,16 +15,15 @@
     <q-item-section>
       <q-item-label>{{ link.title }}</q-item-label>
       <q-item-label caption>{{ link.caption }}</q-item-label>
-    </q-item-section>
+    </q-item-section> -->
   </q-item>
+
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
-
 export default defineComponent({
   name: 'EssentialLink',
-
   setup () {
     const linksList = ref([
       {
