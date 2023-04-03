@@ -34,7 +34,7 @@ class Cobranca(models.Model):
     forma_pagamento = models.ForeignKey(FormaPagamento, on_delete=models.CASCADE, null=True)
     pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, null=True)
     dh_criacao = models.DateTimeField(auto_now_add=True)
-    dh_vencimento = models.DateTimeField(auto_now_add=False)
+    dh_vencimento = models.DateField(auto_now_add=False)
     vl_total = models.DecimalField(max_digits=10, decimal_places=2, null=False)
     nr_parcelas = models.CharField(max_length=2, null=False)
 

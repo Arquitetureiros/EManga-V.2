@@ -6,8 +6,7 @@ from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from django.http.response import JsonResponse
 from emanga.models import Usuario, Endereco, Pedido
-from emanga.serializers import UsuarioSerializer, EnderecoSerializer, PedidoSerializer, CobrancaSerializer, PagamentoSerializer, ItemPedidoSerializer
-
+from emanga.serializers import UsuarioSerializer, EnderecoSerializer, PedidoSerializer, CobrancaSerializer, PagamentoSerializer, ItemPedidoSerializer, CobrancaSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 import json
 
@@ -63,7 +62,6 @@ def pedidoApi(request, id=0):
         }
 
         pedido_serializer = PedidoSerializer(data=pedido)
-        
         if pedido_serializer.is_valid():
             pedido_save = pedido_serializer.save()
             for item in request['pedido']['item_pedido']:
@@ -83,36 +81,43 @@ def pedidoApi(request, id=0):
                         }, safe=False)
                         
             cobranca = {
-                'forma_pagamento': request['pedido']['forma_pagamento_id'],
+                'forma_pagamento': request['pagamento']['forma_pagamento_id'],
                 'pedido' : pedido_save.id,
+                'dh_vencimento': request['pagamento']['dh_vencimento'],
                 'vl_total':  request['pedido']['vl_total'],
-                'nr_parcelas': request['pedido']['nr_parcelas'],
-                'dh_vencimento': request['pedido']['dh_vencimento']
+                'nr_parcelas': request['pagamento']['nr_parcelas'],
             }
-            cobranca_serializer = CobrancaSerializer(data=cobranca);
-
+            cobranca_serializer = CobrancaSerializer(data=cobranca)
+            
             if(cobranca_serializer.is_valid()):
                 cobranca_save = cobranca_serializer.save()
                 #cria n pagamentos sendo n o nr de parcelas
-                for i in range(1, request['pedido']['nr_parcelas']):
+                for i in range(1, request['pagamento']['nr_parcelas']):
+                    print('AQUI')
                     Pagamento = {
                         'cobranca' : cobranca_save.id,
                         'nr_parcela' : i,
-                        'vl_fatura' : request['pedido']['valor_parcela'],
-                        'vl_pago' : request['pedido']['vl_pago'],
-                        'dh_pagamento' : request['pedido']['dh_pagamento']
+                        'vl_fatura' : request['pagamento']['valor_parcela'],
+                        'vl_pago' : request['pagamento']['vl_pago'],
+                        'dh_pagamento' : request['pagamento']['dh_pagamento']
                     }
+                    
                     pagamento_serializer = PagamentoSerializer(data=Pagamento);
                     if pagamento_serializer.is_valid():
                         pagamento_serializer.save()
-
+                    else:
                         return JsonResponse({
-                            'data': request,
-                            'message': 'pedido salvo com sucesso'
+                            'data': pagamento,
+                            'message': 'pagamento invalido'
                         }, safe=False)
-            else:
+                    
                 return JsonResponse({
                     'data': request,
+                    'message': 'pedido salvo com sucesso'
+                }, safe=False)
+            else:
+                return JsonResponse({
+                    'data': cobranca,
                     'message': 'cobranca invalida'
                 }, safe=False)
         else:

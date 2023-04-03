@@ -181,7 +181,7 @@ export default defineComponent({
       return valor;
 
     });
-    
+
     const dadosCartao = ref({
       nr_cartao: null,
       nm_pessoa: null,
@@ -215,6 +215,7 @@ export default defineComponent({
           ]
         }
       }
+
       console.log(obj);
     }
 
@@ -224,7 +225,7 @@ export default defineComponent({
       const dia = ("0" + dataAtual.getDate()).slice(-2);
       const mes = ("0" + (dataAtual.getMonth() + 1)).slice(-2);
       const ano = dataAtual.getFullYear();
-      const dataFormatada = `${dia}/${mes}/${ano}`;
+      const dataFormatada = `${ano}/${mes}/${dia}`;
       let pagamento = {}
 
       switch (tab.value) {
@@ -234,6 +235,7 @@ export default defineComponent({
             nr_parcelas: 1,
             valor_parcela: total.value,
             vl_pago: total.value,
+            dh_pagamento: dataFormatada,
             dh_vencimento: dataFormatada
           }
           break;
