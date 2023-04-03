@@ -11,7 +11,7 @@
         </div>
         <div>
               <div class="row justify-center">
-               <q-input style="width: 259px;" dense outlined v-model="tituloBuscarInicial" @input="buscarManga" label="Pesquisar mangá"/>
+               <q-input style="width: 259px;" dense outlined v-model="tituloBuscarInicial" @input="buscarManga" label="Pesquisar por título do mangá"/>
                 <q-btn  class="q-ml-md" color="primary" icon="fas fa-search" label="Pesquisar" @click="buscarMangaInicial ()"/>
               </div>
         </div>
@@ -113,8 +113,8 @@ export default defineComponent({
     const inCart = ref([])
     const showCart = ref(false)
     function buscarMangaInicial () {
-      this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscarInicial } })
-      // this.$router.replace('/buscar?titulo=' + this.tituloBuscar)
+      // this.$router.push({ path: '/buscar', query: { titulo: this.tituloBuscarInicial } })
+      this.$router.replace('/buscar?titulo=' + this.tituloBuscarInicial)
     }
     function addToCart (product) {
       inCart.value.push(product)
