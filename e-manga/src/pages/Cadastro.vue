@@ -97,6 +97,26 @@ export default defineComponent({
   },
   methods: {
     CadastrarUsuario () {
+      let test_nome = /^[a-zA-Z\s]+$/;
+      let test_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      let test_senha = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[a-z\d@#$!%*?&]{8,}$/i
+
+      if(!test_nome.test(this.usuario.nome))
+      {
+        alert("Nome Invalido")
+        return;
+      }
+      if(!test_email.test(this.usuario.email))
+      {
+        alert("Email Invalido")
+        return;
+      }
+      if(!test_senha.test(this.usuario.senha))
+      {
+        alert("Senha Invalida")
+        return;
+      }
+
       const data = {
         nome: this.usuario.nome,
         email: this.usuario.email,
@@ -104,7 +124,8 @@ export default defineComponent({
       }
 
       if (data.senha !== this.aux.conf_senha) {
-        return
+        alert("As senhas são diferentes")
+        return;
       }
 
       UsuarioDataService.cadastrar(data)

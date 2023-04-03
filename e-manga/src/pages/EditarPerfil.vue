@@ -96,7 +96,7 @@
         <q-card-section class="q-pt-none">
           <div class="row" style="width: 100%">
             <q-input outlined v-model="aux_endereco.cep" label="CEP" :dense="dense" lazy-rules :rules="nameRules" style="width: 70%;"/>
-            <q-input outlined v-model="aux_endereco.num" label="Numero" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
+            <q-input outlined v-model="aux_endereco.num" label="Numero" type="number" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
           </div>
           <q-input outlined v-model="aux_endereco.logradouro" label="Logradouro" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
           <q-input outlined v-model="aux_endereco.cidade" label="Cidade" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
@@ -117,7 +117,7 @@
 
         <q-card-section class="q-pt-none">
           <q-input ref="" outlined v-model="cartao.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-          <q-input ref="" outlined v-model="cartao.numero" label="Numero" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input ref="" outlined v-model="cartao.numero" label="Numero" type="number" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
           <div class="row">
             <q-input ref="" outlined v-model="cartao.validade" label="Validade" :dense="dense" lazy-rules :rules="nameRules" style="width: 70%;"/>
             <q-input ref="" outlined v-model="cartao.cvc" label="Cvc" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
@@ -137,7 +137,7 @@
 
         <q-card-section class="q-pt-none">
           <q-input ref="" outlined v-model="cartao_aux.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-          <q-input ref="" outlined v-model="cartao_aux.numero" label="Numero" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input ref="" outlined v-model="cartao_aux.numero" label="Numero" type="number" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
           <div class="row">
             <q-input ref="" outlined v-model="cartao_aux.validade" label="Validade" :dense="dense" lazy-rules :rules="nameRules" style="width: 70%;"/>
             <q-input ref="" outlined v-model="cartao_aux.cvc" label="Cvc" :dense="dense" lazy-rules :rules="nameRules" style="width: 30%;"/>
@@ -283,6 +283,9 @@ export default defineComponent({
       this.aux_endereco.user_id = this.endereco.user_id;
       const data = this.aux_endereco;
 
+      if(this.aux_endereco.length > 2)
+        return;
+
       EnderecoDataService.atualizar(data)
         .then((response) => {
             
@@ -290,8 +293,25 @@ export default defineComponent({
     },
     SalvarPerfil()
     {
-      /*if(!this.usuario.senha != this.conf_senha)
-        return;*/
+      let test_nome = /^[a-zA-Z\s]+$/;
+      let test_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      let test_senha = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[a-z\d@#$!%*?&]{8,}$/i
+
+      if(!test_nome.test(this.aux_usuario.nome))
+      {
+        alert("Nome Invalido")
+        return;
+      }
+      if(!test_email.test(this.aux_usuario.email))
+      {
+        alert("Email Invalido")
+        return;
+      }
+      if(!test_senha.test(this.aux_usuario.senha))
+      {
+        alert("Senha Invalida")
+        return;
+      }
       
       this.aux_usuario.id = this.usuario.id;
       const data = this.aux_usuario
