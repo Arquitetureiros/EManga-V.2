@@ -77,8 +77,8 @@
         <q-card-section class="q-pt-none">
           <q-input outlined v-model="aux_usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
           <q-input outlined v-model="aux_usuario.email" label="Email" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-          <q-input outlined v-model="aux_usuario.senha" label="Nova Senha" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-          <q-input outlined v-model="conf_senha" label="Senha" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="aux_usuario.senha" label="Nova Senha" type="" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="conf_senha" label="Senha" type="" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
         </q-card-section>
 
         <q-card-actions>
@@ -263,6 +263,7 @@ export default defineComponent({
       UsuarioDataService.obter(decodedToken['user_id'])
         .then((response) => {
           this.usuario = response.data
+          console.log(this.usuario)
             
         })
 
@@ -276,6 +277,7 @@ export default defineComponent({
           console.log(response)
           this.cartoes = response.data;
         })
+
     },
     AtualizarEndereco()
     {
@@ -307,24 +309,49 @@ export default defineComponent({
         alert("Email Invalido")
         return;
       }
-      if(!test_senha.test(this.aux_usuario.senha))
+      if(this.conf_senha != this.usuario.senha)
       {
         alert("Senha Invalida")
         return;
       }
+      if(this.aux_usuario.senha.length == 0)
+      {
+        this.aux_usuario.senha = this.usuario.senha;
+      }
+      else
+      {
+        if(!test_senha.test(this.aux_usuario.senha))
+        {
+          alert("Nova Senha Invalida")
+          return;
+        }else
+        {
+          if(this.conf_senha != this.usuario.senha)
+          {
+            alert("Senhas não batem")
+            return;
+          }
+
+          this.aux_usuario.id = this.usuario.id;
+
+        }
+      }
+      const data = this.aux_usuario;
+
+          UsuarioDataService.atualizar(data)
+            .then((response) => {
+              this.$router.go(this.$router.currentRoute)
+
+            })
       
-      this.aux_usuario.id = this.usuario.id;
-      const data = this.aux_usuario
-
-      UsuarioDataService.atualizar(data)
-        .then((response) => {
-
-        })
     },
     ToggleUpdateInfo()
     {
-      this.aux_usuario = this.usuario;
+      this.aux_usuario.id = this.usuario.id;
+      this.aux_usuario.nome = this.usuario.nome;
+      this.aux_usuario.email = this.usuario.email;
       this.aux_usuario.senha = '';
+      this.conf_senha = '';  
       this.updateInfo = !this.updateInfo;
     },
     ToggleUpdateEndereco()
