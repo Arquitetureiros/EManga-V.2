@@ -31,20 +31,20 @@
           <div class="">
             <div class="q-pa-md" style="max-width: 300px">
               Atualizar titulo do anúncio:
-              <q-input outlined v-model="mangaAtt.ds_titulo" :rules="regrasCampoTexto" label="Titulo" />
+              <q-input outlined v-model="mangaAtt.ds_titulo" :rules="regrasCampoTexto" maxlength="45" label="Titulo" />
             </div>
             <div class="q-pa-md" style="max-width: 300px">
               Atualizar descrição do anúncio: <br>
-              <q-input v-model="mangaAtt.ds_sinopse" :rules="regrasCampoTexto" outlined type="textarea" />
+              <q-input v-model="mangaAtt.ds_sinopse" outlined maxlength="200" type="textarea" />
             </div>
             <div class="q-pa-md row" style="max-width: 400px">
               <div class="q-pr-md" style="max-width: 150px">
                 Cidade
-                <q-input outlined v-model="mangaAtt.cidade" :rules="regrasCampoTexto" label="Cidade" />
+                <q-input outlined v-model="mangaAtt.cidade" :rules="regrasCampoTexto" maxlength="50" label="Cidade" />
               </div>
               <div class="q-pr-md" style="max-width: 150px">
                 Estado abrevidado:
-                <q-input outlined v-model="mangaAtt.estado" :rules="regrasEstado" label="Estado" />
+                <q-input outlined v-model="mangaAtt.estado" :rules="regrasEstado" maxlength="2" label="Estado" />
               </div>
             </div>
             <div class="q-pa-md row" style="max-width: 300px">
@@ -161,7 +161,7 @@ export default defineComponent({
       })
     },
     AtualizarManga () {
-      if (this.mangaAtt.quantidade > 0 && this.mangaAtt.valor > 0 && this.mangaAtt.ds_titulo.length > 0) {
+      if (this.mangaAtt.quantidade > 0 && this.mangaAtt.valor > 0 && this.mangaAtt.ds_titulo.length > 0 && this.mangaAtt.cidade.length > 0 && this.mangaAtt.estado.length > 0) {
         MangaDataService.atualizar(this.mangaAtt.id, this.mangaAtt)
           .then(() => {
             alert('manga atualizado')

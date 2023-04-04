@@ -31,20 +31,20 @@
           <div class="">
             <div class="q-pa-md" style="max-width: 300px">
               Adicionar titulo do anúncio:
-              <q-input outlined v-model="manga.ds_titulo" :rules="regrasCampoTexto" label="Titulo" />
+              <q-input outlined v-model="manga.ds_titulo" :rules="regrasCampoTexto" maxlength="45" label="Titulo" />
             </div>
             <div class="q-pa-md" style="max-width: 300px">
               Adicionar descrição do anúncio:
-              <q-input v-model="manga.ds_sinopse" :rules="regrasCampoTexto" outlined type="textarea" />
+              <q-input v-model="manga.ds_sinopse" outlined maxlength="200" type="textarea" />
             </div>
             <div class="q-pa-md row" style="max-width: 400px">
               <div class="q-pr-md" style="max-width: 150px">
                 Cidade:
-                <q-input outlined v-model="manga.cidade" :rules="regrasCampoTexto" label="Cidade" />
+                <q-input outlined v-model="manga.cidade" :rules="regrasCampoTexto" maxlength="50" label="Cidade" />
               </div>
               <div class="q-pr-md" style="max-width: 150px">
                 Estado abrevidado:
-                <q-input outlined v-model="manga.estado" :rules="regrasEstado" label="Estado" />
+                <q-input outlined v-model="manga.estado" :rules="regrasEstado" maxlength="2" label="Estado" />
               </div>
             </div>
             <div class="q-pa-md row" style="max-width: 300px">
@@ -176,13 +176,13 @@ export default defineComponent({
         fotoCaminho: this.image.name,
         quantidade: this.manga.quantidade
       }
-      if (data.quantidade > 0 && data.valor > 0 && data.ds_titulo.length > 0) {
+      if (data.quantidade > 0 && data.valor > 0 && data.ds_titulo.length > 0 && data.cidade.length > 0 && data.estado.length > 0) {
         MangaDataService.cadastrar(data)
           .then(() => {
             alert('manga adicionado')
           })
       } else {
-        alert('A quantidade e o preço do manga devem ser maior que 0 e ele precisa possuir um titulo')
+        alert('A quantidade e o preço do manga devem ser maior que 0 e ele precisa possuir um titulo, uma cidade e um estado')
       }
     },
     toggleLeftDrawer () {
