@@ -52,7 +52,10 @@ export default defineComponent({
     const quantityOnCart = ref()
 
     function getProductsOnCart () {
-      products.value = JSON.parse(localStorage.getItem('cartProducts'))
+      if(localStorage.getItem('cartProducts')) {
+        products.value = JSON.parse(localStorage.getItem('cartProducts'))
+      }
+
     }
 
     function removeProduct (index) {

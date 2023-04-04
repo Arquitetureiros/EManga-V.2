@@ -172,8 +172,11 @@ export default defineComponent({
       let valor = 0;
 
       itensCarrinho.value.forEach((item, i) => {
-        if(inOrder.value[i] == true) {
-          valor =+ item.price * qtd.value[i]
+        console.log(item);
+        console.log(qtd.value);
+        console.log(inOrder.value);
+        if(inOrder.value[i]) {
+          valor += item.price * qtd.value[i]
         }
       });
 
@@ -189,6 +192,18 @@ export default defineComponent({
       nr_cvv: null
     })
 
+    function getItensCarrinho(){
+      if(localStorage.getItem('cartProducts')){
+
+        itensCarrinho.value = JSON.parse(localStorage.getItem('cartProducts'))
+        itensCarrinho.value.forEach(item => {
+          qtd.value.push(1)
+          inOrder.value.push(true);
+        });
+        console.log(itensCarrinho.value);
+      }
+    }
+
     function copyText () {
       const storage = document.createElement('textarea')
       document.body.appendChild(storage)
@@ -198,25 +213,44 @@ export default defineComponent({
       document.body.removeChild(storage)
     }
 
+    function montaItemPedido(){
+      let item_pedido = [];
+      itensCarrinho.value.forEach((item, i) => {
+        console.log(item);
+        if(inOrder.value[i]){
+          item_pedido.push({
+            manga_id: item.id,
+            qt_pedido: qtd.value[i],
+            vl_unitario: item.price,
+            vl_total: parseFloat(item.price) * qtd.value[i]
+          })
+        }
+      });
+
+      return item_pedido;
+    }
+
     function salvarPedido(pagamento) {
+
+      const item_pedido = montaItemPedido()
       const obj = {
         pagamento: pagamento,
         pedido: {
           user_id: 1,
           endereco_entrega_id: 1,
           vl_total: total.value,
-          item_pedido: [
-              {
-                  manga_id: 1,
-                  qt_pedido: 2,
-                  vl_unitario: 13.00,
-                  vl_total: 20.00
-              }
-          ]
+          item_pedido: item_pedido
         }
       }
-
       console.log(obj);
+      axios.post('http://127.0.0.1:8000/pedido', obj).then((response) => {
+        $q.notify({
+            color: 'positive',
+            message: 'Pedido salvo com sucesso'
+          })
+          localStorage.removeItem('cartProducts');
+          getItensCarrinho()
+      })
     }
 
     function salvarPagamento () {
@@ -225,7 +259,8 @@ export default defineComponent({
       const dia = ("0" + dataAtual.getDate()).slice(-2);
       const mes = ("0" + (dataAtual.getMonth() + 1)).slice(-2);
       const ano = dataAtual.getFullYear();
-      const dataFormatada = `${ano}/${mes}/${dia}`;
+      const dataFormatada = `${ano}-${mes}-${dia}`;
+
       let pagamento = {}
 
       switch (tab.value) {
@@ -261,13 +296,7 @@ export default defineComponent({
     }
 
     onMounted(() => {
-      itensCarrinho.value = JSON.parse(localStorage.getItem('cartProducts'))
-      itensCarrinho.value.forEach(item => {
-        qtd.value.push(1)
-        inOrder.value.push(true);
-      });
-
-      console.log(inOrder.value);
+      getItensCarrinho()
       axios.post('http://127.0.0.1:8000/frete').then((response) => {
         dadosEntrega.value = response.data;
       })
@@ -297,7 +326,8 @@ export default defineComponent({
       dadosEntrega,
       endUser,
       inOrder,
-      itensPedido
+      itensPedido,
+      getItensCarrinho
     }
   }
 })
