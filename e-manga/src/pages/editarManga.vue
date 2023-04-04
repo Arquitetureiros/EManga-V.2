@@ -180,9 +180,11 @@ export default defineComponent({
         cidade: this.manga.cidade,
         estado: this.manga.estado,
         valor: this.manga.valor,
-        fotoCaminho: this.manga.fotoCaminho.name,
+        fotoCaminho: this.manga.fotoCaminho,
         quantidade: 0
       }
+      console.log(this.mangaDest.quantidade)
+
       MangaDataService.atualizar(this.mangaDest.id, this.mangaDest)
         .then(() => {
           alert('manga desativado')

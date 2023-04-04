@@ -23,7 +23,6 @@ def receber_dado(request):
 def mangaApi(request, id=0):
   if request.method=='GET':
     id = request.GET.get('id')
-    print(id)
     if id:
         mangas = manga.objects.filter(id=id, quantidade__gt=0)
     else:
@@ -40,11 +39,14 @@ def mangaApi(request, id=0):
   elif request.method == 'PUT':
     manga_data = JSONParser().parse(request)
     mangas = manga.objects.get(id=id)
+    print(manga_data)
     manga_serializer = MangaSerializer(mangas, data=manga_data)
+    print(manga_serializer)
     if manga_serializer.is_valid():
+        print("oi")
         manga_serializer.save()
         return JsonResponse("atualização feita", safe=False)
-    return JsonResponse("falha na atualização")
+    return JsonResponse({'message': 'falha na atualização'}, safe=False)
   elif request.method=="DELETE":
     mangas = manga.objects.get(id = id)
     mangas.delete()
