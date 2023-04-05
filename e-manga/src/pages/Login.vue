@@ -15,7 +15,7 @@
 
             <q-input ref="emailRef" outlined v-model="usuario.email" type="email" label="Email *" :dense="dense" lazy-rules :rules="emailRules" />
 
-            <q-input ref="passwRef" v-model="usuario.senha" label="Senha *" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
+            <q-input ref="passwRef" v-model="usuario.senha" label="Senha *" type="password" outlined :type="password ? 'password' : 'text'" :rules="passwRules" />
             <div>
               <q-btn label="Entrar" @click="Logar" color="positive" style="width:100%"/>
             </div>

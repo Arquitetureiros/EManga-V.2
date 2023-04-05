@@ -23,10 +23,10 @@
 
         <q-card-section class="q-pt-none row" v-for="item in this.itens" style="width: 100%;">
           <img :src="item.fotoCaminho" style="width: 50%;">
-          <q-card class="column" style="width: 50%; justify-content: center; align-items: end;">
-            <div style="margin: 20px;">Vendido por: <br>{{ item.usuario }}</div>
-            <div style="margin: 20px;">Quantidade: {{ item.qt_pedido }}</div>
-            <div style="margin: 20px;">Valor Total: {{ item.vl_total }}</div>
+          <q-card class="column" style="width: 50%; justify-content: center; align-items: center;text-align: center;">
+            <div><b style="font-size: 21px;">Vendido por: </b><br>{{ item.usuario }}</div>
+            <div><b style="font-size: 21px;">Quantidade: </b><br>{{ item.qt_pedido }}</div>
+            <div><b style="font-size: 21px;">Valor Total:</b><br> {{ item.vl_total }}</div>
           </q-card>
         </q-card-section>
 
@@ -105,6 +105,10 @@ export default defineComponent({
       PedidoDataService.listarPorUsuario(decodedToken['user_id'])
         .then((response) => {
           this.pedidos = response.data
+          for(let pedido of this.pedidos)
+          {
+            pedido.dh_pedido = new Date(pedido['dh_pedido']).toLocaleDateString()
+          }
         })
     },
     ListarItensPedido(id)

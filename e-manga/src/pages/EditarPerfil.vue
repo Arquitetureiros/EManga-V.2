@@ -77,8 +77,8 @@
         <q-card-section class="q-pt-none">
           <q-input outlined v-model="aux_usuario.nome" label="Nome" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
           <q-input outlined v-model="aux_usuario.email" label="Email" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-          <q-input outlined v-model="aux_usuario.senha" label="Nova Senha" type="" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
-          <q-input outlined v-model="conf_senha" label="Senha" type="" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="aux_usuario.senha" label="Nova Senha" type="password" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
+          <q-input outlined v-model="conf_senha" label="Senha" type="password" :dense="dense" lazy-rules :rules="nameRules" style="width: 100%;"/>
         </q-card-section>
 
         <q-card-actions>
