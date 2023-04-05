@@ -152,7 +152,7 @@ export default defineComponent({
   methods: {
     listar () {
       MangaDataService.listar().then((response) => {
-        this.products = response.data.slice(0, 6)
+        this.products = response.data.slice(0, 10)
         console.log(this.products)
       })
     },

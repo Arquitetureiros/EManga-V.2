@@ -56,14 +56,14 @@
                    style="max-width: 100px"
                    dense
                    outlined
-                   max="2"
+                   :max="mangaAtt.quantidade"
                    min="1"
                 />
-                (Disponivel 2)
+                (Disponivel {{ mangaAtt.quantidade }})
               </div>
               <div class="q-pr-md" style="max-width: 300px; display: flex; flex-direction: column; gap: 9px;">
                 Preço:
-                <p style="font-size: large;">{{ mangaAtt.valor }}</p>
+                <p style="font-size: large;">{{ mangaAtt.valor * quant }}</p>
               </div>
               <div class="q-pa-md">
                 <q-btn to="/buscar" color="primary" label="Adicionar ao carrinho"/>
