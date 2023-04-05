@@ -41,7 +41,7 @@ class Cobranca(models.Model):
 class Pagamento(models.Model):
     id = models.AutoField(primary_key=True)
     cobranca = models.ForeignKey(Cobranca, on_delete=models.CASCADE)
-    nr_parcela = models.IntegerField(null=False)
+    nr_parcela = models.IntegerField(null=True)
     dh_pagamento = models.DateTimeField(null=True)
     vl_fatura =  models.DecimalField(max_digits=10, decimal_places=2, null=False)
     vl_pago = models.DecimalField(max_digits=10, decimal_places=2, null=True)
@@ -52,7 +52,7 @@ class Manga(models.Model):
     ds_sinopse = models.CharField(max_length=200)
     cidade = models.CharField(max_length=50,default='')
     estado = models.CharField(max_length=5,default='')
-    valor = models.FloatField()
+    valor = models.DecimalField(max_digits=10, decimal_places=2, null=False)
     quantidade = models.IntegerField(default=0)
     fotoCaminho = models.CharField(max_length=700)
     disponivel = models.BooleanField(default=True)

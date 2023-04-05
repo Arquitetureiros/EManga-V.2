@@ -92,8 +92,8 @@ def pedidoApi(request, id=0):
             if(cobranca_serializer.is_valid()):
                 cobranca_save = cobranca_serializer.save()
                 #cria n pagamentos sendo n o nr de parcelas
-                for i in range(1, request['pagamento']['nr_parcelas']):
-                    print('AQUI')
+                for i in range(0, request['pagamento']['nr_parcelas']):
+                    
                     Pagamento = {
                         'cobranca' : cobranca_save.id,
                         'nr_parcela' : i,
@@ -123,7 +123,7 @@ def pedidoApi(request, id=0):
         else:
             return JsonResponse({
                 'data': request,
-                'message': 'erro ao salvar pedido'
+                'message': 'erro ao salvar pedido: {}'.format(pedido_serializer.errors)
             }, safe=False)
 
             
