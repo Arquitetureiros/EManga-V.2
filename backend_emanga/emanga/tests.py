@@ -6,13 +6,13 @@ import json
 class MangaTestCase(TestCase):
     def test_get_manga_by_ds_titulo(self):
         manga_data = {
-            "ds_titulo": "Titulo do Manga",
-            "ds_sinopse": "Sinopse do Manga",
-            "cidade": "São Paulo",
-            "estado": "SP",
-            "valor": 10,
-            "fotoCaminho": "chain.jpg",
-            "quantidade": 5
+            "ds_titulo": "berserk vol.1",
+            "ds_sinopse": "primeiro volume do manga de berserk",
+            "cidade": "cianorte",
+            "estado": "pr",
+            "valor": 5,
+            "fotoCaminho": "berserk.jpg",
+            "quantidade": 4
         }
         manga_data = json.dumps(manga_data)
         self.client.post('/manga', data=manga_data, content_type='application/json')
@@ -22,9 +22,10 @@ class MangaTestCase(TestCase):
 
         mangas = json.loads(response.content.decode('utf-8'))
         self.assertEqual(len(mangas), 1)
-        self.assertEqual(mangas[0]['ds_sinopse'], 'Sinopse do Manga')
-        self.assertEqual(mangas[0]['cidade'], 'São Paulo')
-        self.assertEqual(mangas[0]['estado'], 'SP')
-        self.assertEqual(mangas[0]['valor'], 10)
-        self.assertEqual(mangas[0]['fotoCaminho'], 'chain.jpg')
-        self.assertEqual(mangas[0]['quantidade'], 5)
+        self.assertEqual(mangas[0]['ds_sinopse'], 'primeiro volume do manga de berserk')
+        self.assertEqual(mangas[0]['cidade'], 'cianorte')
+        self.assertEqual(mangas[0]['estado'], 'pr')
+        self.assertEqual(mangas[0]['valor'], 5)
+        self.assertEqual(mangas[0]['fotoCaminho'], 'berserk.jpg')
+        self.assertEqual(mangas[0]['quantidade'], 4)
+

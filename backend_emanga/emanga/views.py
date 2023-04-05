@@ -16,7 +16,7 @@ def mangaApi(request, id=0):
     if id:
         mangas = manga.objects.filter(id=id)
     else:
-        mangas = manga.objects.all().order_by('-id')
+        mangas = manga.objects.filter(quantidade__gt=0).order_by('-id')
     manga_serializer = MangaSerializer(mangas, many=True)
     return JsonResponse(manga_serializer.data, safe=False)
   elif request.method=='GET' and 'titulo' in request.path:
